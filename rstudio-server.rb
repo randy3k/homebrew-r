@@ -7,7 +7,7 @@ class RstudioServer < Formula
 
   depends_on "ant" => :build
   depends_on "cmake" => :build
-  depends_on "homebrew/versions/boost150"
+  depends_on "randy3k/rstudio-server/boost150"
   depends_on "r"
   depends_on "openssl"
 
