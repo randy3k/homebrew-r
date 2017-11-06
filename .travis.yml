@@ -15,7 +15,7 @@ install:
 
 script:
   - brew audit rstudio-server
-  - brew install --build-bottle rstudio-server
+  - brew install --build-bottle --verbose rstudio-server
   - brew audit --strict rstudio-server
   - brew test rstudio-server
   - brew bottle rstudio-server
