@@ -4,7 +4,7 @@
 
 Install from source
 ```
-brew install randy3k/rstudio-server/rstudio-server
+brew install --build-from-source randy3k/rstudio-server/rstudio-server
 ```
 
 Install pre-built bottle

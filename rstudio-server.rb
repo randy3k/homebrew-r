@@ -7,6 +7,7 @@ class RstudioServer < Formula
 
   bottle do
     cellar :any
+    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/v1.1.383/"
     sha256 "09d38dfdc19dff07e94bc8a5bae64fe42ee74001bd42aaca1002cbe6d3051d65" => :el_capitan
     sha256 "09d38dfdc19dff07e94bc8a5bae64fe42ee74001bd42aaca1002cbe6d3051d65" => :sierra
     sha256 "09d38dfdc19dff07e94bc8a5bae64fe42ee74001bd42aaca1002cbe6d3051d65" => :high_sierra
