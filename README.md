@@ -1,5 +1,7 @@
 # Homebrew formula for RStudio Server
 
+[![Build Status](https://travis-ci.org/randy3k/homebrew-rstudio-server.svg?branch=master)](https://travis-ci.org/randy3k/homebrew-rstudio-server)
+
 Two lines instruction
 
 ```
