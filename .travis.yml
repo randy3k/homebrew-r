@@ -14,11 +14,10 @@ script:
   - brew install --build-bottle --verbose rstudio-server
   - brew audit --strict rstudio-server
   - brew test rstudio-server
-  - brew bottle rstudio-server
 
 before_deploy:
+  - brew bottle rstudio-server
   - mv rstudio-server*.tar.gz "$TRAVIS_TAG.tar.gz"
-
 
 deploy:
   provider: releases
