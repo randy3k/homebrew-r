@@ -6,7 +6,6 @@ class RstudioServer < Formula
   head "https://github.com/rstudio/rstudio.git"
 
   bottle do
-    rebuild 1
     cellar :any
     root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/v1.1.383"
     sha256 "8c1b556b5347561e1b87a4d2d0205dc5545fb9f96a9036111ccc04d5d37e5326" => :el_capitan

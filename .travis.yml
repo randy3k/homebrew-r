@@ -15,7 +15,7 @@ script:
   - brew test rstudio-server
 
 before_deploy:
-  - brew bottle rstudio-server
+  - brew bottle --no-rebuild rstudio-server
   - brew instal mmv
   - mcp 'rstudio-server-*.el_capitan.*.tar.gz' 'rstudio-server-#1.sierra.#2.tar.gz'
   - mcp 'rstudio-server-*.el_capitan.*.tar.gz' 'rstudio-server-#1.high_sierra.#2.tar.gz'
