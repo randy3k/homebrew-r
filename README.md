@@ -2,9 +2,13 @@
 
 [![Build Status](https://travis-ci.org/randy3k/homebrew-rstudio-server.svg?branch=master)](https://travis-ci.org/randy3k/homebrew-rstudio-server)
 
-Two lines instruction
-
+Install from source
 ```
-brew tap randy3k/rstudio-server 
 brew install randy3k/rstudio-server/rstudio-server
+```
+
+Install pre-built bottle
+```
+brew install --only-dependencies randy3k/rstudio-server/rstudio-server
+brew install https://github.com/randy3k/homebrew-rstudio-server/releases/download/v1.1.383/rstudio-server-1.1.383.el_capitan.bottle.1.tar.gz
 ```
