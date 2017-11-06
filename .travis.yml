@@ -10,9 +10,8 @@ install:
   - brew tap --repair
 
 script:
-  - brew audit rstudio-server
-  - brew install --build-bottle --verbose rstudio-server
   - brew audit --strict rstudio-server
+  - brew install --build-bottle --verbose rstudio-server
   - brew test rstudio-server
 
 before_deploy:
