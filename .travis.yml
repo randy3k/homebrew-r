@@ -17,6 +17,9 @@ script:
 
 before_deploy:
   - brew bottle rstudio-server
+  - brew instal mmv
+  - mcp 'rstudio-server-*.el_capitan.*.tar.gz' 'rstudio-server-#1.sierra.#2.tar.gz'
+  - mcp 'rstudio-server-*.el_capitan.*.tar.gz' 'rstudio-server-#1.high_sierra.#2.tar.gz'
 
 deploy:
   provider: releases
