@@ -12,7 +12,8 @@ mcp 'rstudio-server-*.el_capitan.*.tar.gz' '/tmp/bottles/rstudio-server-#1.sierr
 mcp 'rstudio-server-*.el_capitan.*.tar.gz' '/tmp/bottles/rstudio-server-#1.high_sierra.#2.tar.gz'
 
 git config user.email "randy.cs.lai@gmail.com"
-git config user.name "Randy Lai"
+git config user.email "randy.cs.lai@gmail.com"
+git config github.user "randy3k"
 
 if [ -n "$TRAVIS_TAG" ]; then
     ghr -replace "$TRAVIS_TAG" /tmp/bottles
