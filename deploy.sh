@@ -16,6 +16,6 @@ git config user.name "Randy Lai"
 
 if [ -n "$TRAVIS_TAG" ]; then
     ghr -replace "$TRAVIS_TAG" /tmp/bottles
-else if [ "$TRAVIS_BRANCH" == "master" ]; then
+elif [ "$TRAVIS_BRANCH" == "master" ]; then
     ghr -replace -recreate "$RSBUILD" /tmp/bottles
 fi
