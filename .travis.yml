@@ -1,6 +1,10 @@
 os: osx
 language: generic
 
+env:
+  - RSBUILD=stable
+  - RSBUILD=head
+
 before_install:
   - brew update
 
@@ -11,23 +15,15 @@ install:
 
 script:
   - brew audit --strict rstudio-server
-  - brew install --build-bottle --verbose rstudio-server
+  - if [ "$RSBUILD" == "stable" ]; then brew install --build-from-source --build-bottle --verbose rstudio-server fi
+  - if [ "$RSBUILD" == "head" ]; then brew install --build-from-source --build-bottle --verbose --HEAD rstudio-server fi
   - brew test rstudio-server
 
-before_deploy:
-  - brew bottle --no-rebuild rstudio-server
-  - brew instal mmv
-  - mcp 'rstudio-server-*.el_capitan.*.tar.gz' 'rstudio-server-#1.sierra.#2.tar.gz'
-  - mcp 'rstudio-server-*.el_capitan.*.tar.gz' 'rstudio-server-#1.high_sierra.#2.tar.gz'
+after_success:
+  - brew install mmv tcnksm/ghr/ghr
+  - sh deploy.sh
 
-deploy:
-  provider: releases
-  api_key:
-    secure: xOH0+epmCceOiW+mq9PI/y+IxN1DGih/kxOXYJxmdfJ54+pgfmWqh07Or9dUal4MwG1OFT8RrhvHQEo+F2Lc0HX4sc3ItJO7A/lBErH9TmBoQ5+Kf81oeuDFx0PcpxqjJ4S9RfM52llKxfDBoRfm7KsNKqKsCLS2FMvfxI3iDYU2Ab8qpOJTHECJmI9Xu9cmrM2s+lFd0KRrnR+PEErj76fHpUnzrAwONbJHtQxX+lDMy7wD/iFg718bH00vRXtKFnI05sLlcK8D+3FogCRFCFalKY+lgkVQa3RSiF9PAO5EXRzxKLGxmOI2k0ZAYAgpan/UcdA4dNOSKkC6mCXwLb/nIrdCk23ZOSbGVrd8Enci1NynuGNM6ixptkW5BoM/5c/6osU6VVejCIN7VWpw39/InHJcz0Ni2W/kD5BpqlERVXRlVK6ZnJnK4yZmfllSMcDhZ2w+ZAw2Ax5mAZ+/oOUICGLV+xbIETe5nZuLSqpdBTwOYrMXnPzwLWu6Z9zLBMPnyrhQlxdrVoa/g2xaFsoaYGojNadi94kD+u7BdSgSADv+yC/c/Xb5t3HSQ4lpTSXJhJbXHcLpVW+gqHogFDZnwDMCHbH0U6OAQhsIGw/48PGIdQtcLPLkEJfohpt01E3dIOLERWKsGT5Fyd3FtRbl3D+kEhsKtlBrxzFlgz4=
-  file_glob: true
-  file: rstudio-server*.tar.gz
-  overwrite: true
-  skip_cleanup: true
-  on:
-    tags: true
-    repo: randy3k/homebrew-rstudio-server
+branches:
+  except:
+  - stable
+  - head
