@@ -15,9 +15,4 @@ script:
   - brew test rstudio-server
 
 after_success:
-  - brew install mmv tcnksm/ghr/ghr
   - sh deploy.sh
-
-branches:
-  except:
-  - nightly

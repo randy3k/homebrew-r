@@ -4,6 +4,10 @@ set -e
 
 [ "$TRAVIS_PULL_REQUEST" != "false" ] && exit 0
 
+[ -z "$TRAVIS_TAG" ] && exit 0
+
+brew install mmv tcnksm/ghr/ghr
+
 mkdir -p /tmp/bottles
 brew bottle --no-rebuild rstudio-server 2>&1 | tee /tmp/bottles/shasum
 
@@ -15,8 +19,4 @@ git config user.email "randy.cs.lai@gmail.com"
 git config user.email "randy.cs.lai@gmail.com"
 git config github.user "randy3k"
 
-if [ -n "$TRAVIS_TAG" ]; then
-    ghr -replace "$TRAVIS_TAG" /tmp/bottles
-elif [ "$TRAVIS_BRANCH" == "master" ]; then
-    ghr -replace -recreate "nightly" /tmp/bottles
-fi
+ghr -replace "$TRAVIS_TAG" /tmp/bottles
