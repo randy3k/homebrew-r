@@ -15,8 +15,8 @@ install:
 
 script:
   - brew audit --strict rstudio-server
-  - if [ "$RSBUILD" == "stable" ]; then brew install --build-from-source --build-bottle --verbose rstudio-server; fi
-  - if [ "$RSBUILD" == "head" ]; then brew install --build-from-source --build-bottle --verbose --HEAD rstudio-server; fi
+  - if [ "$RSBUILD" == "stable" ]; then brew install rstudio-server --build-from-source --build-bottle --debug; fi
+  - if [ "$RSBUILD" == "head" ]; then brew install rstudio-server --build-from-source --build-bottle --debug --HEAD; fi
   - brew test rstudio-server
 
 after_success:
@@ -27,3 +27,6 @@ branches:
   except:
   - stable
   - head
+
+allow_failures:
+  - env: RSBUILD=head
