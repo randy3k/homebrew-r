@@ -191,7 +191,7 @@ class RstudioServer < Formula
       args << "-DPAM_INCLUDE_DIR=#{Formula["linux-pam"].opt_include}" if build.with? "linux-pam"
 
       system "cmake", "..", *args
-      system "make", "install"
+      system "make", "--debug=b", "install"
     end
 
     bin.install_symlink prefix/"rstudio-server/bin/rserver"
