@@ -18,5 +18,5 @@ git config github.user "randy3k"
 if [ -n "$TRAVIS_TAG" ]; then
     ghr -replace "$TRAVIS_TAG" /tmp/bottles
 elif [ "$TRAVIS_BRANCH" == "master" ]; then
-    ghr -replace -recreate "$RSBUILD" /tmp/bottles
+    ghr -replace -recreate "nightly" /tmp/bottles
 fi
