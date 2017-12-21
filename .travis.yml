@@ -1,18 +1,18 @@
-os: osx
-language: generic
+# os: osx
+# language: generic
 
-before_install:
-  - brew update
+# before_install:
+#   - brew update
 
-install:
-  - mkdir -p $(brew --repo)/Library/Taps/randy3k
-  - ln -s $PWD $(brew --repo)/Library/Taps/randy3k/homebrew-rstudio-server
-  - brew tap --repair
+# install:
+#   - mkdir -p $(brew --repo)/Library/Taps/randy3k
+#   - ln -s $PWD $(brew --repo)/Library/Taps/randy3k/homebrew-rstudio-server
+#   - brew tap --repair
 
-script:
-  - brew audit --strict rstudio-server
-  - brew install rstudio-server --build-from-source --build-bottle --verbose
-  - brew test rstudio-server
+# script:
+#   - brew audit --strict rstudio-server
+#   - brew install rstudio-server --build-from-source --build-bottle --verbose
+#   - brew test rstudio-server
 
-after_success:
-  - sh deploy.sh
+# after_success:
+#   - sh deploy.sh

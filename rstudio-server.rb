@@ -5,14 +5,6 @@ class RstudioServer < Formula
   sha256 "6edc85f98366a94f0c9939dde8d25950c65580c9eed7ac245903e0aa1205c818"
   head "https://github.com/rstudio/rstudio.git"
 
-  bottle do
-    cellar :any
-    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/v1.1.383"
-    sha256 "b4ffc509ff9f654a2abf4ff8b2b5159f2e0f44bdaa9929e335ab984d05446d33" => :el_capitan
-    sha256 "b4ffc509ff9f654a2abf4ff8b2b5159f2e0f44bdaa9929e335ab984d05446d33" => :sierra
-    sha256 "b4ffc509ff9f654a2abf4ff8b2b5159f2e0f44bdaa9929e335ab984d05446d33" => :high_sierra
-  end
-
   if OS.linux?
     depends_on "patchelf" => :build
     depends_on "jdk@8" => :recommended
@@ -26,7 +18,7 @@ class RstudioServer < Formula
   depends_on "r" => :recommended
   depends_on "cmake" => :build
   depends_on "ant" => :build
-  depends_on "boost"
+  depends_on "boost@1.63" => :build
   depends_on "openssl"
 
   if build.head?
@@ -174,15 +166,14 @@ class RstudioServer < Formula
 
     mkdir "build" do
       args = ["-DRSTUDIO_TARGET=Server", "-DCMAKE_BUILD_TYPE=Release"]
-      args << "-DRSTUDIO_USE_LIBCXX=Yes"
       args << "-DRSTUDIO_USE_SYSTEM_BOOST=Yes"
-      args << "-DBOOST_ROOT=#{Formula["boost"].opt_prefix}"
-      args << "-DBOOST_INCLUDEDIR=#{Formula["boost"].opt_include}"
-      args << "-DBOOST_LIBRARYDIR=#{Formula["boost"].opt_lib}"
+      args << "-DBOOST_ROOT=#{Formula["boost@1.63"].opt_prefix}"
+      args << "-DBOOST_INCLUDEDIR=#{Formula["boost@1.63"].opt_include}"
+      args << "-DBOOST_LIBRARYDIR=#{Formula["boost@1.63"].opt_lib}"
       args << "-DCMAKE_INSTALL_PREFIX=#{prefix}/rstudio-server"
-      args << "-DCMAKE_CXX_FLAGS=-I#{Formula["openssl"].opt_include} -D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
+      args << "-DCMAKE_CXX_FLAGS=-I#{Formula["openssl"].opt_include}"
 
-      linkerflags = "-DCMAKE_EXE_LINKER_FLAGS=-L#{Formula["openssl"].opt_lib} -L#{Formula["boost"].opt_lib}"
+      linkerflags = "-DCMAKE_EXE_LINKER_FLAGS=-L#{Formula["openssl"].opt_lib} -L#{Formula["boost@1.63"].opt_lib}"
       if OS.linux?
         linkerflags += " -L#{Formula["linux-pam"].opt_lib}" if build.with? "linux-pam"
       end
