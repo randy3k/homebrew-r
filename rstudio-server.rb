@@ -166,7 +166,9 @@ class RstudioServer < Formula
 
     mkdir "build" do
       args = ["-DRSTUDIO_TARGET=Server", "-DCMAKE_BUILD_TYPE=Release"]
+      args << "-DRSTUDIO_USE_LIBCXX=Yes"
       args << "-DRSTUDIO_USE_SYSTEM_BOOST=Yes"
+      args << "-DRSTUDIO_BOOST_VERSION='1.63.0'"
       args << "-DBOOST_ROOT=#{Formula["boost@1.63"].opt_prefix}"
       args << "-DBoost_NO_SYSTEM_PATHS=On"
       args << "-DBOOST_INCLUDEDIR=#{Formula["boost@1.63"].opt_include}"
