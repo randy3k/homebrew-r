@@ -5,6 +5,8 @@ class BoostAT163 < Formula
   sha256 "beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0"
   head "https://github.com/boostorg/boost.git"
 
+  keg_only :versioned_formula
+  
   option "with-icu4c", "Build regexp engine with icu support"
   option "without-single", "Disable building single-threading variant"
   option "without-static", "Disable building static library variant"
