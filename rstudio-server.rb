@@ -172,7 +172,7 @@ class RstudioServer < Formula
       args << "-DBOOST_INCLUDEDIR=#{Formula["boost@1.63"].opt_include}"
       args << "-DBOOST_LIBRARYDIR=#{Formula["boost@1.63"].opt_lib}"
       args << "-DCMAKE_INSTALL_PREFIX=#{prefix}/rstudio-server"
-      args << "-DCMAKE_CXX_FLAGS=-I#{Formula["openssl"].opt_include}"
+      args << "-DCMAKE_CXX_FLAGS=-I#{Formula["openssl"].opt_include} -D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
 
       linkerflags = "-DCMAKE_EXE_LINKER_FLAGS=-L#{Formula["openssl"].opt_lib} -L#{Formula["boost@1.63"].opt_lib}"
       if OS.linux?
