@@ -168,6 +168,7 @@ class RstudioServer < Formula
       args = ["-DRSTUDIO_TARGET=Server", "-DCMAKE_BUILD_TYPE=Release"]
       args << "-DRSTUDIO_USE_SYSTEM_BOOST=Yes"
       args << "-DBOOST_ROOT=#{Formula["boost@1.63"].opt_prefix}"
+      args << "-DBoost_NO_SYSTEM_PATHS=On"
       args << "-DBOOST_INCLUDEDIR=#{Formula["boost@1.63"].opt_include}"
       args << "-DBOOST_LIBRARYDIR=#{Formula["boost@1.63"].opt_lib}"
       args << "-DCMAKE_INSTALL_PREFIX=#{prefix}/rstudio-server"
