@@ -13,7 +13,6 @@ class BoostRstudioServer < Formula
 
   depends_on "icu4c" => :optional
 
-
   def install
     # Force boost to compile with the desired compiler
     open("user-config.jam", "a") do |file|
