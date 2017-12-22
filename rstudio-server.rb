@@ -124,9 +124,7 @@ class RstudioServer < Formula
       ENV["RSTUDIO_VERSION_PATCH"] = version.to_s.split(".")[2]
     end
 
-    if OS.linux?
-      ENV["JAVA_HOME"] = Formula["jdk@8"].prefix
-    end
+    ENV["JAVA_HOME"] = Formula["jdk@8"].prefix if OS.linux?
 
     gwt_lib = buildpath/"src/gwt/lib/"
     if build.head?
