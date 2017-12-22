@@ -1,26 +1,18 @@
-class BoostAT163 < Formula
+class BoostRstudioServer < Formula
   desc "Collection of portable C++ source libraries"
   homepage "https://www.boost.org/"
   url "https://downloads.sourceforge.net/project/boost/boost/1.63.0/boost_1_63_0.tar.bz2"
   sha256 "beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0"
   head "https://github.com/boostorg/boost.git"
 
-  keg_only :versioned_formula
-  
+  keg_only "used only by rstudio-server at build time"
+
   option "with-icu4c", "Build regexp engine with icu support"
   option "without-single", "Disable building single-threading variant"
   option "without-static", "Disable building static library variant"
-  option :cxx11
 
-  deprecated_option "with-icu" => "with-icu4c"
+  depends_on "icu4c" => :optional
 
-  if build.cxx11?
-    depends_on "icu4c" => [:optional, "c++11"]
-  else
-    depends_on "icu4c" => :optional
-  end
-
-  needs :cxx11 if build.cxx11?
 
   def install
     # Force boost to compile with the desired compiler
@@ -50,7 +42,6 @@ class BoostAT163 < Formula
     # layout should be synchronized with boost-python and boost-mpi
     args = ["--prefix=#{prefix}",
             "--libdir=#{lib}",
-            "-d2",
             "-j#{ENV.make_jobs}",
             "--layout=tagged",
             "--user-config=user-config.jam",
@@ -66,15 +57,6 @@ class BoostAT163 < Formula
       args << "link=shared,static"
     else
       args << "link=shared"
-    end
-
-    # Trunk starts using "clang++ -x c" to select C compiler which breaks C++11
-    # handling using ENV.cxx11. Using "cxxflags" and "linkflags" still works.
-    if build.cxx11?
-      args << "cxxflags=-std=c++11"
-      if ENV.compiler == :clang
-        args << "cxxflags=-stdlib=libc++" << "linkflags=-stdlib=libc++"
-      end
     end
 
     system "./bootstrap.sh", *bootstrap_args
@@ -114,7 +96,7 @@ class BoostAT163 < Formula
         return 0;
       }
     EOS
-    system ENV.cxx, "test.cpp", "-std=c++1y", "-L#{lib}", "-lboost_system", "-o", "test"
+    system ENV.cxx, "test.cpp", "-std=c++1y", "-I#{include}", "-L#{lib}", "-lboost_system", "-o", "test"
     system "./test"
   end
 end

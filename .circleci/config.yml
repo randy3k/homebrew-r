@@ -1,0 +1,46 @@
+version: 2
+jobs:
+  build-macos:
+    macos:
+      xcode: "9.0"
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-rstudio-server
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+    steps:
+      - run: |
+          brew --version
+          brew update
+          cd $(brew --repo)
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
+          git fetch origin --tags
+          git reset --hard origin/master
+          brew --env
+          brew config
+      - checkout
+      - run: |
+          git remote set-url origin $CIRCLE_REPOSITORY_URL
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
+          git fetch origin
+          git reset --hard origin/master
+          git config --global user.name randy3k
+          git config --global user.email randy.cs.lai@gmail.com
+          repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+          echo $repo
+          mkdir -p $repo
+          cp -a ./ $repo/
+      - run: |
+          mkdir /tmp/bottles
+          cd /tmp/bottles
+          brew test-bot --skip-setup -v
+      - store_test_results:
+          path: /tmp/bottles
+      - store_artifacts:
+          path: /tmp/bottles
+          destination: bottles
+
+workflows:
+  version: 2
+  test-bot:
+    jobs:
+      - build-macos

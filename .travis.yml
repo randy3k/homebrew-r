@@ -10,9 +10,9 @@
 #   - brew tap --repair
 
 # script:
-#   - brew audit --strict rstudio-server
-#   - brew install rstudio-server --build-from-source --build-bottle --verbose
-#   - brew test rstudio-server
+#   - mkdir -p /tmp/bottles
+#   - cd /tmp/bottles
+#   - brew test-bot --skip-setup -v
 
 # after_success:
 #   - sh deploy.sh
