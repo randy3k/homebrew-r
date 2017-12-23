@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build-macos:
+  test-bot:
     macos:
       xcode: "9.0"
     environment:
@@ -23,26 +23,49 @@ jobs:
           TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
           mkdir -p $TAP_PATH
           cp -a ./ $TAP_PATH/
-      - run: |
-          mkdir /tmp/bottles
-          cd /tmp/bottles
-          if [ -z "$CIRCLE_TAG" ]; then
-            brew test-bot --skip-setup -v
-          else
-            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-v[0-9\.]*$/\1/p')
-            brew test-bot --skip-setup -v $FORMULA
-            brew install mmv tcnksm/ghr/ghr
-            mv "/tmp/bottles/$FORMULA.*" /tmp/out/
-            ghr -replace "$CIRCLE_TAG" /tmp/out
-          fi
+      - run:
+          no_output_timeout: 60m
+          command: |
+            mkdir /tmp/bottles
+            cd /tmp/bottles
+            brew test-bot --skip-setup
+
+  deploy-tag:
+    macos:
+      xcode: "9.0"
+    steps:
+      - checkout
+      - run:
+          no_output_timeout: 60m
+          command: |
+            TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+            mkdir -p $TAP_PATH
+            cp -a ./ $TAP_PATH/
+            brew tap --repair
+            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\.]*$/\1/p')
+            echo "brew install $FORMULA"
+            brew install --build-from-source --build-bottle $FORMULA
+            mkdir -p /tmp/bottles
+            cd /tmp/bottles
+            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$CIRCLE_TAG
+            brew bottle --no-rebuild --json --root-url=$BOTTLE_ROOT_URL $FORMULA
+            brew install tcnksm/ghr/ghr
+            mkdir -p /tmp/dist
+            for f in /tmp/bottles/$FORMULA*; do cp "$f" /tmp/dist/; done
+            ghr --username randy3k --token $GITHUB_TOKEN --replace "$CIRCLE_TAG" /tmp/dist
 
 workflows:
   version: 2
-  test-bot:
+  build:
     jobs:
-      - build-macos:
+      - test-bot:
+          filters:
+            branches:
+              ignore: master
+
+      - deploy-tag:
           filters:
             tags:
               only: /.*/
             branches:
-              ignore: master
+              ignore: /.*/
