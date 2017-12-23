@@ -8,8 +8,8 @@ class BoostRstudioServer < Formula
   bottle do
     root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/boost-rstudio-server-bottle"
     cellar :any
-    sha256 "eabb0f173c4ad86cd53d574a307d5c75217e060c65f00d8a8e34435d15940da6" => :sierra
-    sha256 "eabb0f173c4ad86cd53d574a307d5c75217e060c65f00d8a8e34435d15940da6" => :high_sierra
+    sha256 "a83a15fe1adfa708c1a8ae54e89391d65fe22aa8ed48ce3ff987b7726a652b04" => :high_sierra
+    sha256 "a83a15fe1adfa708c1a8ae54e89391d65fe22aa8ed48ce3ff987b7726a652b04" => :sierra
   end
 
   keg_only "it is used only by rstudio-server at build time"
