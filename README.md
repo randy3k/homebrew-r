@@ -3,12 +3,12 @@
 
 ```
 brew tap randy3k/rstudio-server
-brew install randy3k/rstudio-server/rstudio-server
+brew install rstudio-server
 ```
 
 
 A prebuilt bottle can be installed via
 ```
-brew install https://29-60392032-gh.circle-artifacts.com/0/bottles/rstudio-server-1.1.383.sierra.bottle.2.tar.gz
+brew install rstudio-server --force-bottle
 ```
-PS: although the bottle was built for macOS sierra, it should also work on other macOS platforms.
+PS: although the bottle was built for macOS 10.12 Sierra, it should also work on other macOS platforms.
