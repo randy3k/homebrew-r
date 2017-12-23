@@ -34,6 +34,10 @@ jobs:
     macos:
       xcode: "9.0"
     steps:
+      - run: |
+          brew update
+          git config --global user.name randy3k
+          git config --global user.email randy.cs.lai@gmail.com
       - checkout
       - run:
           no_output_timeout: 60m
@@ -43,16 +47,26 @@ jobs:
             cp -a ./ $TAP_PATH/
             brew tap --repair
             FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\.]*$/\1/p')
-            echo "brew install $FORMULA"
             brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
-            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$CIRCLE_TAG
+            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/${FORMULA}-bottle
             brew bottle --no-rebuild --json --root-url=$BOTTLE_ROOT_URL $FORMULA
-            brew install tcnksm/ghr/ghr
-            mkdir -p /tmp/dist
-            for f in /tmp/bottles/$FORMULA*; do cp "$f" /tmp/dist/; done
-            ghr --username randy3k --token $GITHUB_TOKEN --replace "$CIRCLE_TAG" /tmp/dist
+            brew install hub tcnksm/ghr/ghr
+            ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "${FORMULA}-bottle" /tmp/bottles
+      - run: |
+            TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+            cd $TAP_PATH
+            git reset --hard origin/master
+            brew bottle --merge --write /tmp/bottles/*.json
+            git checkout -b "$CIRCLE_TAG#bottle"
+            git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+            git push --set-upstream --force origin "$CIRCLE_TAG#bottle"
+            hub pull-request -F - <<- EOF
+            $(git log -1 --pretty=%B)"
+
+            @$CIRCLE_PROJECT_USERNAME
+            EOF
 
 workflows:
   version: 2
@@ -61,7 +75,7 @@ workflows:
       - test-bot:
           filters:
             branches:
-              ignore: master
+              ignore: /master|.*#bottle/
 
       - deploy-tag:
           filters:
