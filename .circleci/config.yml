@@ -52,8 +52,13 @@ jobs:
             cd /tmp/bottles
             BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/${FORMULA}-bottle
             brew bottle --no-rebuild --json --root-url=$BOTTLE_ROOT_URL $FORMULA
-            brew install hub tcnksm/ghr/ghr
+            brew install mmv hub tcnksm/ghr/ghr
             ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "${FORMULA}-bottle" /tmp/bottles
+      - run: |
+            cd /tmp/bottles
+            # create fake high_sierra bottle
+            mcp "*.sierra.*" "#1.high_sierra.#2"
+            sed -i '' 's/sierra/high_sierra/g' *.high_sierra.*.json
       - run: |
             TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
             cd $TAP_PATH
