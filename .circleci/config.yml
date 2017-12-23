@@ -62,11 +62,7 @@ jobs:
             git checkout -b "$CIRCLE_TAG#bottle"
             git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
             git push --set-upstream --force origin "$CIRCLE_TAG#bottle"
-            hub pull-request -F - <<- EOF
-            $(git log -1 --pretty=%B)"
-
-            @$CIRCLE_PROJECT_USERNAME
-            EOF
+            hub pull-request -m "$(git log -1 --pretty=%B)"
 
 workflows:
   version: 2
