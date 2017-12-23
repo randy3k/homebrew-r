@@ -5,6 +5,11 @@ class RstudioServer < Formula
   sha256 "6edc85f98366a94f0c9939dde8d25950c65580c9eed7ac245903e0aa1205c818"
   head "https://github.com/rstudio/rstudio.git"
 
+  bottle do
+    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/rstudio-server-bottle"
+    sha256 "edbea059844a385b89a1c395ed128b01ed8a029466ba1603ab61a8b4baf9ff7b" => :sierra
+  end
+
   if OS.linux?
     depends_on "patchelf" => :build
     depends_on "jdk@8" => :recommended
