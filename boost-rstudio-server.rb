@@ -5,6 +5,12 @@ class BoostRstudioServer < Formula
   sha256 "beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0"
   head "https://github.com/boostorg/boost.git"
 
+  bottle do
+    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/boost-rstudio-server-bottle"
+    cellar :any
+    sha256 "eabb0f173c4ad86cd53d574a307d5c75217e060c65f00d8a8e34435d15940da6" => :sierra
+  end
+
   keg_only "it is used only by rstudio-server at build time"
 
   option "with-icu4c", "Build regexp engine with icu support"
