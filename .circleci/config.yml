@@ -44,3 +44,5 @@ workflows:
           filters:
             tags:
               only: /.*/
+            branches:
+              ignore: master
