@@ -7,6 +7,7 @@ class HelloWorld < Formula
   bottle do
     root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/hello-world-bottle"
     cellar :any_skip_relocation
+    sha256 "a75fbce7436a6714e817eb3262d0d99d7de52411ebfe3f145b7a4aac57e58159" => :high_sierra
     sha256 "a75fbce7436a6714e817eb3262d0d99d7de52411ebfe3f145b7a4aac57e58159" => :sierra
   end
 
