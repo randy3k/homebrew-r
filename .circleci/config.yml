@@ -29,7 +29,7 @@ jobs:
           if [ -z "$CIRCLE_TAG" ]; then
             brew test-bot --skip-setup -v
           else
-            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z]*).*/\1/p')
+            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-v[0-9\.]*$/\1/p')
             brew test-bot --skip-setup -v $FORMULA
             brew install mmv tcnksm/ghr/ghr
             mv "/tmp/bottles/$FORMULA.*" /tmp/out/
