@@ -30,7 +30,7 @@ jobs:
             cd /tmp/bottles
             brew test-bot --skip-setup
 
-  deploy-macos-tag:
+  macos-bottle:
     macos:
       xcode: "9.0"
     steps:
@@ -75,7 +75,7 @@ jobs:
             git push --set-upstream --force origin "$CIRCLE_TAG#macos-bottle"
             hub pull-request -m "$(git log -1 --pretty=%B)"
 
-  deploy-linux-tag:
+  linux-bottle:
     docker:
       - image: linuxbrew/linuxbrew
     steps:
@@ -128,14 +128,7 @@ workflows:
             branches:
               ignore: /master|.*bottle/
 
-      - deploy-macos-tag:
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              ignore: /.*/
-
-      - deploy-linux-tag:
+      - macos-bottle:
           filters:
             tags:
               only: /.*/
