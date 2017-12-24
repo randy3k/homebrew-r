@@ -7,9 +7,9 @@ class HelloWorld < Formula
 
   bottle do
     root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/hello-world-bottle"
-    cellar :any_skip_relocation
     sha256 "31db71ef43b44c6a81ee5429370d18582d69bd70ec739d3199c1701e8ba7800d" => :high_sierra
     sha256 "31db71ef43b44c6a81ee5429370d18582d69bd70ec739d3199c1701e8ba7800d" => :sierra
+    sha256 "5a87f0bf62b4ec91375da31fd0374dbd845c999544edff760e3b0b9e173f74a9" => :x86_64_linux
   end
 
   conflicts_with "camlistore", :because => "both install `hello` binaries"
