@@ -51,7 +51,7 @@ jobs:
             mkdir -p /tmp/bottles
             cd /tmp/bottles
             BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/${FORMULA}-bottle
-            brew bottle --no-rebuild --json --root-url=$BOTTLE_ROOT_URL $FORMULA
+            brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
       - run: |
             # create fake high_sierra bottle
             brew install mmv
@@ -96,7 +96,7 @@ jobs:
             mkdir -p /tmp/bottles
             cd /tmp/bottles
             BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/${FORMULA}-bottle
-            brew bottle --no-rebuild --json --root-url=$BOTTLE_ROOT_URL $FORMULA
+            brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
       - run: |
             # upload bottles to github releases
             sudo apt-get update
