@@ -126,7 +126,7 @@ workflows:
       - test-bot:
           filters:
             branches:
-              ignore: /master|.*#bottle/
+              ignore: /master|.*bottle/
 
       - deploy-macos-tag:
           filters:
