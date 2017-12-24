@@ -46,7 +46,7 @@ jobs:
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
             brew tap --repair
-            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\.]*$/\1/p')
+            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
             brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
@@ -61,7 +61,7 @@ jobs:
       - run: |
             # upload bottles to github releases
             brew install tcnksm/ghr/ghr
-            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\.]*$/\1/p')
+            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
             ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "${FORMULA}-bottle" /tmp/bottles
       - run: |
             # create pull request
