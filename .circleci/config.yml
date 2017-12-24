@@ -99,7 +99,11 @@ jobs:
             brew bottle --no-rebuild --json --root-url=$BOTTLE_ROOT_URL $FORMULA
       - run: |
             # upload bottles to github releases
-            go get github.com/tcnksm/ghr
+            sudo apt-get update
+            sudo apt-get install unzip
+            mkdir -p /tmp/ghr
+            curl -L https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip -o /tmp/ghr/ghr.zip
+            sudo unzip /tmp/ghr/ghr.zip -d /usr/local/bin/
             FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
             ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "${FORMULA}-bottle" /tmp/bottles
       - run: |
@@ -124,7 +128,7 @@ workflows:
             branches:
               ignore: /master|.*#bottle/
 
-      - deploy-mac-tag:
+      - deploy-macos-tag:
           filters:
             tags:
               only: /.*/
