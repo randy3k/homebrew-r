@@ -69,10 +69,10 @@ jobs:
             TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
             cd $TAP_PATH
             git reset --hard origin/master
-            brew bottle --merge --write /tmp/bottles/*.json
-            git checkout -b "$CIRCLE_TAG#bottle"
+            brew bottle --merge --write --keep-old /tmp/bottles/*.json
+            git checkout -b "$CIRCLE_TAG#macos-bottle"
             git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-            git push --set-upstream --force origin "$CIRCLE_TAG#bottle"
+            git push --set-upstream --force origin "$CIRCLE_TAG#macos-bottle"
             hub pull-request -m "$(git log -1 --pretty=%B)"
 
   deploy-linux-tag:
@@ -112,10 +112,10 @@ jobs:
             TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
             cd $TAP_PATH
             git reset --hard origin/master
-            brew bottle --merge --write /tmp/bottles/*.json
-            git checkout -b "$CIRCLE_TAG#bottle"
+            brew bottle --merge --write --keep-old /tmp/bottles/*.json
+            git checkout -b "$CIRCLE_TAG#linux-bottle"
             git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-            git push --set-upstream --force origin "$CIRCLE_TAG#bottle"
+            git push --set-upstream --force origin "$CIRCLE_TAG#linux-bottle"
             hub pull-request -m "$(git log -1 --pretty=%B)"
 
 
