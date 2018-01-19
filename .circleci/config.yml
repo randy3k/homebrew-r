@@ -53,11 +53,9 @@ jobs:
             BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/${FORMULA}-bottle
             brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
       - run: |
-            # make sierra_or_later bottle
-            brew install mmv
+            # modify merge message platform tag
             cd /tmp/bottles
-            mmv "*.sierra.*" "#1.sierra_or_later.#2"
-            sed -i '' 's/sierra/sierra_or_later/g' *.sierra_or_later.*.json
+            sed -i '' 's/"sierra"/"sierra_or_later"/g' *.sierra.*.json
       - run: |
             # upload bottles to github releases
             brew install tcnksm/ghr/ghr
