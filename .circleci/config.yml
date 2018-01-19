@@ -60,7 +60,7 @@ jobs:
             # upload bottles to github releases
             brew install tcnksm/ghr/ghr
             FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
-            ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN "${FORMULA}-bottle" /tmp/bottles
+            ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "${FORMULA}-bottle" /tmp/bottles
       - run: |
             # create pull request
             brew install hub
