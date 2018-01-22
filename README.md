@@ -1,6 +1,9 @@
 # Homebrew formula for RStudio Server
 
-This tap hosts the formula for [RStudio Server](https://www.rstudio.com/products/rstudio/download-server/) as [homebrew-science](https://github.com/Homebrew/homebrew-science) has been deprecated. The bottles are built by CircieCI and uploaded to Github release page.
+As [homebrew-science](https://github.com/Homebrew/homebrew-science) has been
+deprecated, this tap is now used to host the formula for [RStudio
+Server](https://www.rstudio.com/products/rstudio/download-server/). The
+bottles are built by CircieCI and uploaded to Github release page.
 
 
 ## Installation guide
