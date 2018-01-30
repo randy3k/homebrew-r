@@ -1,8 +1,8 @@
 class RstudioServer < Formula
   desc "Integrated development environment (IDE) for R"
   homepage "https://www.rstudio.com"
-  url "https://github.com/rstudio/rstudio/archive/v1.1.383.tar.gz"
-  sha256 "6edc85f98366a94f0c9939dde8d25950c65580c9eed7ac245903e0aa1205c818"
+  url "https://github.com/rstudio/rstudio/archive/v1.1.419.tar.gz"
+  sha256 "292ec1c2824b16bc76bc8672dcd9f59d4c74f52b24ffbbafc2b4c7f74658fb4b"
   head "https://github.com/rstudio/rstudio.git"
 
   bottle do
