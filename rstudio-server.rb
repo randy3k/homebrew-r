@@ -225,26 +225,26 @@ class RstudioServer < Formula
       if which_linux_distribution == "rpm"
         daemon = <<-EOS
 
-              sudo cp #{opt_prefix}/extras/systemd/rstudio-server.redhat.service /etc/systemd/system/
+        sudo cp #{opt_prefix}/extras/systemd/rstudio-server.redhat.service /etc/systemd/system/
         EOS
       else
         daemon = <<-EOS
 
-              sudo cp #{opt_prefix}/extras/systemd/rstudio-server.service /etc/systemd/system/
+        sudo cp #{opt_prefix}/extras/systemd/rstudio-server.service /etc/systemd/system/
         EOS
       end
     elsif OS.mac?
       daemon = <<-EOS
 
-              If it is an upgrade or the plist file exists, unload the plist first
-              sudo launchctl unload -w /Library/LaunchDaemons/com.rstudio.launchd.rserver.plist
+        If it is an upgrade or the plist file exists, unload the plist first
+        sudo launchctl unload -w /Library/LaunchDaemons/com.rstudio.launchd.rserver.plist
 
-              sudo cp #{opt_prefix}/extras/launchd/com.rstudio.launchd.rserver.plist /Library/LaunchDaemons/
-              sudo launchctl load -w /Library/LaunchDaemons/com.rstudio.launchd.rserver.plist
+        sudo cp #{opt_prefix}/extras/launchd/com.rstudio.launchd.rserver.plist /Library/LaunchDaemons/
+        sudo launchctl load -w /Library/LaunchDaemons/com.rstudio.launchd.rserver.plist
       EOS
     end
 
-    <<-EOS.unindent
+    <<~EOS
       - To test run RStudio Server,
           sudo #{opt_bin}/rserver --server-daemonize=0
 
