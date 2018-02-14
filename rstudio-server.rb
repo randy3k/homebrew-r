@@ -12,14 +12,14 @@ class RstudioServer < Formula
 
   if OS.linux?
     depends_on "patchelf" => :build
-    depends_on "jdk@8" => :recommended
+    depends_on "jdk@8" => :build
     depends_on "libedit"
     depends_on "ncurses"
     depends_on "libffi"
     depends_on "util-linux" # for libuuid
     depends_on "linuxbrew/extra/linux-pam"
   end
-  depends_on :java => "1.8"
+  depends_on :java => "1.8" if OS.mac?
   depends_on "r" => :recommended
   depends_on "cmake" => :build
   depends_on "ant" => :build
