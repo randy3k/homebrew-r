@@ -18,8 +18,9 @@ class RstudioServer < Formula
     depends_on "libffi"
     depends_on "util-linux" # for libuuid
     depends_on "linuxbrew/extra/linux-pam"
+  elsif OS.mac?
+    depends_on :java => "1.8"
   end
-  depends_on :java => "1.8" if OS.mac?
   depends_on "r" => :recommended
   depends_on "cmake" => :build
   depends_on "ant" => :build
