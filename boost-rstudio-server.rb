@@ -12,33 +12,33 @@ class BoostRstudioServer < Formula
     sha256 "8fb27f54ffd92b108dc1dd26e97684dbc3283ffe4b50fe0918b6cf3540499d5f" => :sierra_or_later
   end
 
-  env :userpaths
-
-  option :universal
   option "with-icu4c", "Build regexp engine with icu support"
   option "without-single", "Disable building single-threading variant"
   option "without-static", "Disable building static library variant"
-  option "with-mpi", "Build with MPI support"
   option :cxx11
 
   deprecated_option "with-icu" => "with-icu4c"
 
   if build.cxx11?
     depends_on "icu4c" => [:optional, "c++11"]
-    depends_on "open-mpi" => "c++11" if build.with? "mpi"
   else
     depends_on "icu4c" => :optional
-    depends_on "open-mpi" => [:cc, :cxx, :optional]
   end
+  depends_on "bzip2" unless OS.mac?
 
   needs :cxx11 if build.cxx11?
 
   def install
-    ENV.universal_binary if build.universal?
+    # Reduce memory usage below 4 GB for Circle CI.
+    ENV["HOMEBREW_MAKE_JOBS"] = "6" if ENV["CIRCLECI"]
 
     # Force boost to compile with the desired compiler
     open("user-config.jam", "a") do |file|
-      file.write "using darwin : : #{ENV.cxx} ;\n"
+      if OS.mac?
+        file.write "using darwin : : #{ENV.cxx} ;\n"
+      else
+        file.write "using gcc : : #{ENV.cxx} ;\n"
+      end
       file.write "using mpi ;\n" if build.with? "mpi"
     end
 
@@ -53,25 +53,15 @@ class BoostRstudioServer < Formula
     end
 
     # Handle libraries that will not be built.
-    without_libraries = ["python"]
-
-    # The context library is implemented as x86_64 ASM, so it
-    # won't build on PPC or 32-bit builds
-    # see https://github.com/Homebrew/homebrew/issues/17646
-    if Hardware::CPU.ppc? || Hardware::CPU.is_32_bit? || build.universal?
-      without_libraries << "context"
-      # The coroutine library depends on the context library.
-      without_libraries << "coroutine"
-    end
+    without_libraries = ["python", "mpi"]
 
     # Boost.Log cannot be built using Apple GCC at the moment. Disabled
     # on such systems.
     without_libraries << "log" if ENV.compiler == :gcc
-    without_libraries << "mpi" if build.without? "mpi"
 
     bootstrap_args << "--without-libraries=#{without_libraries.join(",")}"
 
-    # layout should be synchronized with boost-python
+    # layout should be synchronized with boost-python and boost-mpi
     args = ["--prefix=#{prefix}",
             "--libdir=#{lib}",
             "-d2",
@@ -92,8 +82,6 @@ class BoostRstudioServer < Formula
       args << "link=shared"
     end
 
-    args << "address-model=32_64" << "architecture=x86" << "pch=off" if build.universal?
-
     # Trunk starts using "clang++ -x c" to select C compiler which breaks C++11
     # handling using ENV.cxx11. Using "cxxflags" and "linkflags" still works.
     if build.cxx11?
@@ -102,6 +90,10 @@ class BoostRstudioServer < Formula
         args << "cxxflags=-stdlib=libc++" << "linkflags=-stdlib=libc++"
       end
     end
+
+    # Fix error: bzlib.h: No such file or directory
+    # and /usr/bin/ld: cannot find -lbz2
+    args += ["include=#{HOMEBREW_PREFIX}/include", "linkflags=-L#{HOMEBREW_PREFIX}/lib"] unless OS.mac?
 
     system "./bootstrap.sh", *bootstrap_args
     system "./b2", "headers"
@@ -114,16 +106,7 @@ class BoostRstudioServer < Formula
     # instead.
     if Dir["#{lib}/libboost_log*"].empty?
       s += <<-EOS.undent
-
       Building of Boost.Log is disabled because it requires newer GCC or Clang.
-      EOS
-    end
-
-    if Hardware::CPU.ppc? || Hardware::CPU.is_32_bit? || build.universal?
-      s += <<-EOS.undent
-
-      Building of Boost.Context and Boost.Coroutine is disabled as they are
-      only supported on x86_64.
       EOS
     end
 
@@ -138,7 +121,6 @@ class BoostRstudioServer < Formula
       #include <assert.h>
       using namespace boost::algorithm;
       using namespace std;
-
       int main()
       {
         string str("a,b");
