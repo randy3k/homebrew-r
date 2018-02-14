@@ -16,22 +16,21 @@ class BoostRstudioServer < Formula
   option "with-icu4c", "Build regexp engine with icu support"
   option "without-single", "Disable building single-threading variant"
   option "without-static", "Disable building static library variant"
-  option :cxx11
 
   deprecated_option "with-icu" => "with-icu4c"
 
-  if build.cxx11?
-    depends_on "icu4c" => [:optional, "c++11"]
-  else
-    depends_on "icu4c" => :optional
-  end
-  depends_on "bzip2" unless OS.mac?
+  depends_on "icu4c" => :optional
 
-  needs :cxx11 if build.cxx11?
+  unless OS.mac?
+    depends_on "bzip2"
+    depends_on "zlib"
+  end
+
+  needs :cxx11
 
   def install
     # Reduce memory usage below 4 GB for Circle CI.
-    ENV["HOMEBREW_MAKE_JOBS"] = "6" if ENV["CIRCLECI"]
+    ENV["MAKEFLAGS"] = "-j5" if ENV["CIRCLECI"]
 
     # Force boost to compile with the desired compiler
     open("user-config.jam", "a") do |file|
@@ -69,6 +68,7 @@ class BoostRstudioServer < Formula
             "-j#{ENV.make_jobs}",
             "--layout=tagged",
             "--user-config=user-config.jam",
+            "-sNO_LZMA=1",
             "install"]
 
     if build.with? "single"
@@ -85,11 +85,9 @@ class BoostRstudioServer < Formula
 
     # Trunk starts using "clang++ -x c" to select C compiler which breaks C++11
     # handling using ENV.cxx11. Using "cxxflags" and "linkflags" still works.
-    if build.cxx11?
-      args << "cxxflags=-std=c++11"
-      if ENV.compiler == :clang
-        args << "cxxflags=-stdlib=libc++" << "linkflags=-stdlib=libc++"
-      end
+    args << "cxxflags=-std=c++11"
+    if ENV.compiler == :clang
+      args << "cxxflags=-stdlib=libc++" << "linkflags=-stdlib=libc++"
     end
 
     # Fix error: bzlib.h: No such file or directory
@@ -106,8 +104,8 @@ class BoostRstudioServer < Formula
     # ENV.compiler doesn't exist in caveats. Check library availability
     # instead.
     if Dir["#{lib}/libboost_log*"].empty?
-      s += <<-EOS.undent
-      Building of Boost.Log is disabled because it requires newer GCC or Clang.
+      s += <<~EOS
+        Building of Boost.Log is disabled because it requires newer GCC or Clang.
       EOS
     end
 
@@ -115,13 +113,14 @@ class BoostRstudioServer < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <boost/algorithm/string.hpp>
       #include <string>
       #include <vector>
       #include <assert.h>
       using namespace boost::algorithm;
       using namespace std;
+
       int main()
       {
         string str("a,b");
