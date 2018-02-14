@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test-bot:
+  test-bot-macos:
     macos:
       xcode: "9.0"
     environment:
@@ -9,7 +9,6 @@ jobs:
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - run: |
-          brew update
           cd $(brew --repo)
           git fetch origin --tags
           git reset --hard origin/master
@@ -30,14 +29,39 @@ jobs:
             cd /tmp/bottles
             brew test-bot --skip-setup
 
-  bottle:
+  test-bot-linux:
+    docker:
+      - image: linuxbrew/linuxbrew
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-rstudio-server
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+    steps:
+      - run: |
+          cd $(brew --repo)
+          git fetch origin --tags
+          git reset --hard origin/master
+          git config --global user.name randy3k
+          git config --global user.email randy.cs.lai@gmail.com
+      - checkout
+      - run: |
+          git remote set-url origin $CIRCLE_REPOSITORY_URL
+          git fetch origin
+          git reset --hard origin/master
+          TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+          mkdir -p $TAP_PATH
+          cp -a ./ $TAP_PATH/
+      - run:
+          no_output_timeout: 60m
+          command: |
+            mkdir /tmp/bottles
+            cd /tmp/bottles
+            brew test-bot --skip-setup
+
+  bottle-macos:
     macos:
       xcode: "9.0"
     steps:
-      - run: |
-          brew update
-          git config --global user.name randy3k
-          git config --global user.email randy.cs.lai@gmail.com
       - checkout
       - run:
           no_output_timeout: 60m
@@ -56,33 +80,96 @@ jobs:
             # modify merge message platform tag
             cd /tmp/bottles
             sed -i '' 's/"sierra"/"sierra_or_later"/g' *.sierra.*.json
-      - run: |
-            # upload bottles to github releases
-            brew install tcnksm/ghr/ghr
-            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
-            ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "${FORMULA}-bottle" /tmp/bottles
-      - run: |
-            # create pull request
-            brew install hub
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - bottles
+
+  bottle-linux:
+    docker:
+      - image: linuxbrew/linuxbrew
+    steps:
+      - checkout
+      - run:
+          no_output_timeout: 60m
+          command: |
             TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-            cd $TAP_PATH
-            git reset --hard origin/master
-            brew bottle --merge --write /tmp/bottles/*.json
-            git checkout -b "$CIRCLE_TAG#bottle"
-            git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-            git push --set-upstream --force origin "$CIRCLE_TAG#bottle"
-            hub pull-request -m "$(git log -1 --pretty=%B)"
+            mkdir -p $TAP_PATH
+            cp -a ./ $TAP_PATH/
+            brew tap --repair
+            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
+            brew install --build-from-source --build-bottle $FORMULA
+            mkdir -p /tmp/bottles
+            cd /tmp/bottles
+            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/${FORMULA}-bottle
+            brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
+
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - bottles
+
+  upload-bottles:
+    docker:
+      - image: linuxbrew/linuxbrew
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - checkout
+      - run: |
+          git config --global user.name randy3k
+          git config --global user.email randy.cs.lai@gmail.com
+      - run: |
+          # upload bottles to github releases
+          brew install unzip
+          curl -L https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip -o /tmp/ghr.zip
+          mkdir -p ~/.local/bin/
+          unzip /tmp/ghr.zip  -d ~/.local/bin/
+          FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
+          ~/.local/bin/ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "${FORMULA}-bottle" /tmp/workspace/bottles
+      - run: |
+          brew install hub
+          TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+          mkdir -p $TAP_PATH
+          cp -a ./ $TAP_PATH/
+          brew tap --repair
+          # create pull request
+          cd $TAP_PATH
+          git reset --hard origin/master
+          brew bottle --merge --write /tmp/workspace/bottles/*.json
+          git checkout -b "$CIRCLE_TAG#bottle"
+          git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          git push --set-upstream --force origin "$CIRCLE_TAG#bottle"
+          hub pull-request -m "$(git log -1 --pretty=%B)"
 
 workflows:
   version: 2
   build:
     jobs:
-      - test-bot:
+      - test-bot-macos:
           filters:
             branches:
               ignore: /master|.*#bottle/
-
-      - bottle:
+      - test-bot-linux:
+          filters:
+            branches:
+              ignore: /master|.*#bottle/
+      - upload-bottles:
+          requires:
+            - bottle-macos
+            - bottle-linux
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - bottle-macos:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - bottle-linux:
           filters:
             tags:
               only: /.*/
