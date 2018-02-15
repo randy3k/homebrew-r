@@ -43,7 +43,9 @@ jobs:
           git reset --hard origin/master
           git config --global user.name randy3k
           git config --global user.email randy.cs.lai@gmail.com
-      - run: brew install jdk  # ant requires it
+      - run: |
+          brew install jdk@8  # ant requires it
+          brew link jdk@8 --force
       - checkout
       - run: |
           git remote set-url origin $CIRCLE_REPOSITORY_URL
@@ -91,7 +93,9 @@ jobs:
       - image: linuxbrew/linuxbrew
     steps:
       - checkout
-      - run: brew install jdk  # ant requires it
+      - run: |
+            brew install jdk@8  # ant requires it
+            brew link jdk@8 --force
       - run:
           no_output_timeout: 60m
           command: |
