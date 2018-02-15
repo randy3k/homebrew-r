@@ -77,7 +77,7 @@ jobs:
             brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
-            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/${FORMULA}-bottle
+            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$CIRCLE_TAG
             brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
       - run: |
             # modify merge message platform tag
@@ -107,7 +107,7 @@ jobs:
             brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
-            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/${FORMULA}-bottle
+            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$CIRCLE_TAG
             brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
 
       - persist_to_workspace:
@@ -131,8 +131,7 @@ jobs:
           curl -L https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip -o /tmp/ghr.zip
           mkdir -p ~/.local/bin/
           unzip /tmp/ghr.zip  -d ~/.local/bin/
-          FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
-          ~/.local/bin/ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "${FORMULA}-bottle" /tmp/workspace/bottles
+          ~/.local/bin/ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$CIRCLE_TAG" /tmp/workspace/bottles
       - run: |
           brew install hub
           TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
@@ -143,9 +142,9 @@ jobs:
           cd $TAP_PATH
           git reset --hard origin/master
           brew bottle --merge --write /tmp/workspace/bottles/*.json
-          git checkout -b "$CIRCLE_TAG#bottle"
+          git checkout -b "$CIRCLE_TAG#pr"
           git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-          git push --set-upstream --force origin "$CIRCLE_TAG#bottle"
+          git push --set-upstream --force origin "$CIRCLE_TAG#pr"
           hub pull-request -m "$(git log -1 --pretty=%B)"
 
 workflows:
@@ -155,11 +154,11 @@ workflows:
       - test-bot-macos:
           filters:
             branches:
-              ignore: /master|.*#bottle/
+              ignore: /master|.*#pr/
       - test-bot-linux:
           filters:
             branches:
-              ignore: /master|.*#bottle/
+              ignore: /master|.*#pr/
       - upload-bottles:
           requires:
             - bottle-macos
