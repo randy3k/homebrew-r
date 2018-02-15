@@ -6,11 +6,11 @@ class BoostRstudioServer < Formula
   head "https://github.com/boostorg/boost.git"
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/boost-rstudio-server-bottle"
+    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/boost-rstudio-server-1.63.0"
     cellar :any_skip_relocation
-    rebuild 2
-    sha256 "74732ddd9e74d0e88584140b41b5f3c2988de28a5f4d26ab9224af8677127579" => :sierra_or_later
-    sha256 "6f4ee89fb08c829c5c72770a4e49410f773b6758493199d6a0b199a453a84378" => :x86_64_linux
+    rebuild 3
+    sha256 "fc9c4c730afa450b0c3a847e25930db5ad9fcd6a698935cd79bf9cbfc3722512" => :sierra_or_later
+    sha256 "737a393c9e14d267d1f994206bb9282f3f9d3d16a09d58d2d04d3aca0e7de417" => :x86_64_linux
   end
 
   option "with-icu4c", "Build regexp engine with icu support"
