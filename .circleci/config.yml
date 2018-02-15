@@ -91,6 +91,8 @@ jobs:
   bottle-linux:
     docker:
       - image: linuxbrew/linuxbrew
+    environment:
+      _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
     steps:
       - checkout
       - run: |
