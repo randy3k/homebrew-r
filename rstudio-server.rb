@@ -6,8 +6,10 @@ class RstudioServer < Formula
   head "https://github.com/rstudio/rstudio.git"
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/rstudio-server-bottle"
-    sha256 "2c6800be16df7e6046fb7492896779f5c2dd5e303f18ab83a167ef7064422800" => :sierra_or_later
+    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/rstudio-server-1.1.419"
+    cellar :any
+    rebuild 1
+    sha256 "6735e9047263c34b24a53bd51f926bc8c6ca658030f876033e425434031aaed9" => :sierra_or_later
   end
 
   if OS.linux?
