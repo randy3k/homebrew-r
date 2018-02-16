@@ -9,25 +9,30 @@ jobs:
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - run: |
+          brew --version
+          brew update
           cd $(brew --repo)
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
           git fetch origin --tags
           git reset --hard origin/master
-          git config --global user.name randy3k
-          git config --global user.email randy.cs.lai@gmail.com
+          brew --env
+          brew config
       - checkout
       - run: |
           git remote set-url origin $CIRCLE_REPOSITORY_URL
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
           git fetch origin
           git reset --hard origin/master
-          TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-          mkdir -p $TAP_PATH
-          cp -a ./ $TAP_PATH/
-      - run:
-          no_output_timeout: 60m
-          command: |
-            mkdir /tmp/bottles
-            cd /tmp/bottles
-            brew test-bot --skip-setup
+          git config --global user.name LinuxbrewTestBot
+          git config --global user.email testbot@linuxbrew.sh
+          repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+          echo $repo
+          mkdir -p $repo
+          cp -a ./ $repo/
+      - run: |
+          mkdir /tmp/bottles
+          cd /tmp/bottles
+          brew test-bot --skip-setup --local
 
   test-bot-linux:
     docker:
@@ -38,28 +43,33 @@ jobs:
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - run: |
+          brew --version
+          brew update
           cd $(brew --repo)
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
           git fetch origin --tags
           git reset --hard origin/master
-          git config --global user.name randy3k
-          git config --global user.email randy.cs.lai@gmail.com
-      - run: |
-          brew install jdk@8  # ant requires it
-          brew link jdk@8 --force
+          brew --env
+          brew config
       - checkout
       - run: |
           git remote set-url origin $CIRCLE_REPOSITORY_URL
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
           git fetch origin
           git reset --hard origin/master
-          TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-          mkdir -p $TAP_PATH
-          cp -a ./ $TAP_PATH/
-      - run:
-          no_output_timeout: 60m
-          command: |
-            mkdir /tmp/bottles
-            cd /tmp/bottles
-            brew test-bot --skip-setup
+          git config --global user.name LinuxbrewTestBot
+          git config --global user.email testbot@linuxbrew.sh
+          repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+          echo $repo
+          mkdir -p $repo
+          cp -a ./ $repo/
+      - run: |
+          mkdir /tmp/bottles
+          cd /tmp/bottles
+          brew install patchelf
+          brew tap linuxbrew/xorg
+          brew tap linuxbrew/extra
+          brew test-bot --skip-setup --local
 
   bottle-macos:
     macos:
