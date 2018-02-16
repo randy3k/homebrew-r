@@ -83,6 +83,11 @@ jobs:
             # modify merge message platform tag
             cd /tmp/bottles
             sed -i '' 's/"sierra"/"sierra_or_later"/g' *.sierra.*.json
+      - run: |
+            # upload bottles to github releases
+            brew tap tcnksm/ghr
+            brew install ghr
+            ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$CIRCLE_TAG" /tmp/bottles
       - persist_to_workspace:
           root: /tmp
           paths:
@@ -111,13 +116,19 @@ jobs:
             cd /tmp/bottles
             BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$CIRCLE_TAG
             brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
-
+      - run: |
+            # upload bottles to github releases
+            brew install unzip
+            curl -L https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip -o /tmp/ghr.zip
+            mkdir -p ~/.local/bin/
+            unzip /tmp/ghr.zip  -d ~/.local/bin/
+            ~/.local/bin/ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$CIRCLE_TAG" /tmp/bottles
       - persist_to_workspace:
           root: /tmp
           paths:
             - bottles
 
-  upload-bottles:
+  create-pr:
     docker:
       - image: linuxbrew/linuxbrew
     steps:
@@ -127,13 +138,6 @@ jobs:
       - run: |
           git config --global user.name randy3k
           git config --global user.email randy.cs.lai@gmail.com
-      - run: |
-          # upload bottles to github releases
-          brew install unzip
-          curl -L https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip -o /tmp/ghr.zip
-          mkdir -p ~/.local/bin/
-          unzip /tmp/ghr.zip  -d ~/.local/bin/
-          ~/.local/bin/ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$CIRCLE_TAG" /tmp/workspace/bottles
       - run: |
           brew install hub
           TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
@@ -161,7 +165,7 @@ workflows:
           filters:
             branches:
               ignore: /master|.*#pr/
-      - upload-bottles:
+      - create-pr:
           requires:
             - bottle-macos
             - bottle-linux
