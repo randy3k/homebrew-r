@@ -13,6 +13,8 @@ class BoostRstudioServer < Formula
     sha256 "737a393c9e14d267d1f994206bb9282f3f9d3d16a09d58d2d04d3aca0e7de417" => :x86_64_linux
   end
 
+  keg_only :versioned_formula
+
   option "with-icu4c", "Build regexp engine with icu support"
   option "without-single", "Disable building single-threading variant"
   option "without-static", "Disable building static library variant"
