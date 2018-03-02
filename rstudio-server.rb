@@ -190,9 +190,6 @@ class RstudioServer < Formula
 
       args << "-DPAM_INCLUDE_DIR=#{Formula["linux-pam"].opt_include}" if build.with? "linux-pam"
 
-      puts "CPPFLAGS", ENV["CPPFLAGS"]
-      puts "CFLAGS", ENV["CFLAGS"]
-      puts "CXXFLAGS", ENV["CXXFLAGS"]
       system "cmake", "..", *args
       system "make", "install"
     end
