@@ -181,14 +181,14 @@ workflows:
           filters:
             branches:
               ignore: /master|.*#pr/
-      # - test-bot-linux:
-      #     filters:
-      #       branches:
-      #         ignore: /master|.*#pr/
+      - test-bot-linux:
+          filters:
+            branches:
+              ignore: /master|.*#pr/
       - create-pr:
           requires:
             - bottle-macos
-            # - bottle-linux
+            - bottle-linux
           filters:
             tags:
               only: /.*/
