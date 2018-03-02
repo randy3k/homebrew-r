@@ -14,7 +14,6 @@ class RstudioServer < Formula
 
   if OS.linux?
     depends_on "patchelf" => :build
-    depends_on "jdk@8" => :build
     depends_on "libedit"
     depends_on "ncurses"
     depends_on "libffi"
@@ -133,6 +132,10 @@ class RstudioServer < Formula
       ENV["RSTUDIO_VERSION_PATCH"] = version.to_s.split(".")[2]
     end
 
+    # reset CFLAGS anc CXXFLAGS set by java requirement
+    ENV["CFLAGS"] = ""
+    ENV["CXXFLAGS"] = ""
+
     gwt_lib = buildpath/"src/gwt/lib/"
     if build.head?
       (gwt_lib/"gin/2.1.2").install resource("gin")
@@ -187,6 +190,9 @@ class RstudioServer < Formula
 
       args << "-DPAM_INCLUDE_DIR=#{Formula["linux-pam"].opt_include}" if build.with? "linux-pam"
 
+      puts "CPPFLAGS", ENV["CPPFLAGS"]
+      puts "CFLAGS", ENV["CFLAGS"]
+      puts "CXXFLAGS", ENV["CXXFLAGS"]
       system "cmake", "..", *args
       system "make", "install"
     end
