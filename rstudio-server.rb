@@ -20,9 +20,9 @@ class RstudioServer < Formula
     depends_on "libffi"
     depends_on "util-linux" # for libuuid
     depends_on "linuxbrew/extra/linux-pam"
-  elsif OS.mac?
-    depends_on :java => "1.8"
   end
+
+  depends_on :java => "1.8"
   depends_on "r" => :recommended
   depends_on "cmake" => :build
   depends_on "ant" => :build
@@ -131,8 +131,6 @@ class RstudioServer < Formula
       ENV["RSTUDIO_VERSION_MINOR"] = version.to_s.split(".")[1]
       ENV["RSTUDIO_VERSION_PATCH"] = version.to_s.split(".")[2]
     end
-
-    ENV["JAVA_HOME"] = Formula["jdk@8"].prefix if OS.linux?
 
     gwt_lib = buildpath/"src/gwt/lib/"
     if build.head?
