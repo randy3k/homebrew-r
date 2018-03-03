@@ -7,10 +7,8 @@ class RstudioServer < Formula
   revision 1
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/rstudio-server-1.1.419"
-    cellar :any
-    rebuild 1
-    sha256 "6735e9047263c34b24a53bd51f926bc8c6ca658030f876033e425434031aaed9" => :sierra_or_later
+    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/rstudio-server-1.1.419_1"
+    sha256 "cd138af889288a0c6806c13d1adf069ac9f75614eecc2f23c35d83060fc564d6" => :sierra_or_later
   end
 
   if OS.linux?
