@@ -134,9 +134,7 @@ jobs:
             cp -a ./ $TAP_PATH/
             brew tap --repair
             FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)(-[0-9\._]*)?$/\1/p')
-            brew install --build-from-source --build-bottle $FORMULA && FAILTURE=true
-            brew gist-logs $FORMULA
-            test -n FAILTURE && false
+            brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
             BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$CIRCLE_TAG
