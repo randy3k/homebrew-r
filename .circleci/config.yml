@@ -41,6 +41,7 @@ jobs:
       CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-rstudio-server
       HOMEBREW_DEVELOPER: 1
       HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_MAKE_JOBS: 4
     steps:
       - run: |
           sudo apt-get update
@@ -49,6 +50,7 @@ jobs:
           sudo apt-get update
           echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
           sudo apt-get install -y oracle-java8-installer
+          sudo apt-get install zip unzip
       - run: |
           brew --version
           brew update
@@ -89,7 +91,7 @@ jobs:
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
             brew tap --repair
-            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
+            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)(-[0-9\._]*)?$/\1/p')
             brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
@@ -112,6 +114,8 @@ jobs:
   bottle-linux:
     docker:
       - image: linuxbrew/linuxbrew
+    environment:
+      HOMEBREW_MAKE_JOBS: 4
     steps:
       - run: |
           sudo apt-get update
@@ -120,6 +124,7 @@ jobs:
           sudo apt-get update
           echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
           sudo apt-get install -y oracle-java8-installer
+          sudo apt-get install zip unzip
       - checkout
       - run:
           no_output_timeout: 60m
@@ -128,7 +133,7 @@ jobs:
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
             brew tap --repair
-            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
+            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)(-[0-9\._]*)?$/\1/p')
             brew install --build-from-source --build-bottle $FORMULA && FAILTURE=true
             brew gist-logs $FORMULA
             test -n FAILTURE && false
