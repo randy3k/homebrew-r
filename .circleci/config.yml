@@ -50,7 +50,7 @@ jobs:
           sudo apt-get update
           echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
           sudo apt-get install -y oracle-java8-installer
-          sudo apt-get install zip unzip
+          sudo apt-get install -y zip unzip
       - run: |
           brew --version
           brew update
@@ -124,7 +124,7 @@ jobs:
           sudo apt-get update
           echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
           sudo apt-get install -y oracle-java8-installer
-          sudo apt-get install zip unzip
+          sudo apt-get install -y zip unzip
       - checkout
       - run:
           no_output_timeout: 60m
