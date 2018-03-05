@@ -40,6 +40,8 @@ class RX11 < Formula
 
     inreplace ["configure", "m4/cairo.m4", "src/modules/X11/devX11.h"], "cairo-xlib.h", "cairo.h"
 
+    ENV.prepend_path "PKG_CONFIG_PATH", Formula["cairo-x11"].opt_lib/"pkgconfig"
+
     args = [
       "--prefix=#{prefix}",
       "--enable-memory-profiling",
