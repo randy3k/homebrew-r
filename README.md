@@ -8,7 +8,7 @@ bottles are built by CircieCI and uploaded to Github release page.
 
 ## Installation for rstudio-server
 
-Although this tap should also work for Linuxbrew, but we will focus on macOS Homebrew.
+Although this formula should also work for Linuxbrew, but we will focus on macOS Homebrew.
 
 1. get Homebrew from https://brew.sh
 
