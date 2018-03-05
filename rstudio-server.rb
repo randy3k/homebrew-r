@@ -28,7 +28,7 @@ class RstudioServer < Formula
   end
 
   depends_on :java => "1.8"
-  depends_on "r" => :recommended
+  depends_on "r" => :build
   depends_on "cmake" => :build
   depends_on "gcc" => :build
   depends_on "ant" => :build
@@ -131,6 +131,9 @@ class RstudioServer < Formula
   end
 
   def install
+    # Reduce memory usage below 4 GB for Circle CI.
+    ENV["MAKEFLAGS"] = "-j4" if ENV["CIRCLECI"]
+
     unless build.head?
       ENV["RSTUDIO_VERSION_MAJOR"] = version.to_s.split(".")[0]
       ENV["RSTUDIO_VERSION_MINOR"] = version.to_s.split(".")[1]

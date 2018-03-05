@@ -41,7 +41,6 @@ jobs:
       CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-rstudio-server
       HOMEBREW_DEVELOPER: 1
       HOMEBREW_NO_AUTO_UPDATE: 1
-      HOMEBREW_MAKE_JOBS: 4
     steps:
       - run: |
           sudo apt-get update
@@ -114,8 +113,6 @@ jobs:
   bottle-linux:
     docker:
       - image: linuxbrew/linuxbrew
-    environment:
-      HOMEBREW_MAKE_JOBS: 4
     steps:
       - run: |
           sudo apt-get update
