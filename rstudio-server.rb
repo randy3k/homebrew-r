@@ -27,7 +27,7 @@ class RstudioServer < Formula
     depends_on "boost-rstudio-server" => :build
   end
 
-  depends_on :java => "1.8"
+  depends_on :java => ["1.8", :build]
   depends_on "r" => :build
   depends_on "cmake" => :build
   depends_on "gcc" => :build
