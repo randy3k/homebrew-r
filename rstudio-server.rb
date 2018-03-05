@@ -140,9 +140,9 @@ class RstudioServer < Formula
       ENV["RSTUDIO_VERSION_PATCH"] = version.to_s.split(".")[2]
     end
 
-    # reset CFLAGS anc CXXFLAGS set by java requirement
-    ENV.remove "CFLAGS", "-I#{ENV["JAVA_HOME"]}/linux"
-    ENV.remove "CXXFLAGS", "-I#{ENV["JAVA_HOME"]}/linux"
+    # remove CFLAGS anc CXXFLAGS set by java requirement
+    ENV.remove "CFLAGS", "/usr/local/linux"
+    ENV.remove "CXXFLAGS", "/usr/local/linux"
 
     gwt_lib = buildpath/"src/gwt/lib/"
     if build.head?
