@@ -141,8 +141,8 @@ class RstudioServer < Formula
     end
 
     # reset CFLAGS anc CXXFLAGS set by java requirement
-    ENV["CFLAGS"] = ""
-    ENV["CXXFLAGS"] = ""
+    ENV.remove "CFLAGS", "-I#{ENV["JAVA_HOME"]}/linux"
+    ENV.remove "CXXFLAGS", "-I#{ENV["JAVA_HOME"]}/linux"
 
     gwt_lib = buildpath/"src/gwt/lib/"
     if build.head?
