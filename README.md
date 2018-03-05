@@ -8,6 +8,7 @@ bottles are built by CircieCI and uploaded to Github release page.
 ## Installing r with x11 support
 
 <details>
+
 1. add this tap and install `r-x11`
 
 ```sh
@@ -19,6 +20,7 @@ brew install r-x11
 ## Installing rstudio-server
 
 <details>
+
 Although this formula should also work for Linuxbrew, but we will focus on macOS Homebrew.
 
 1. add this tap and install `rstudio-server`
