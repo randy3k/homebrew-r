@@ -256,7 +256,7 @@ class RstudioServer < Formula
 
     <<~EOS
       - To test run RStudio Server,
-          sudo #{opt_bin}/rserver --server-daemonize=0
+          #{opt_bin}/rserver --server-daemonize=0
 
       - To complete the installation of RStudio Server
           1. register RStudio daemon#{daemon}
