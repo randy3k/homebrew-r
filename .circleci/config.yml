@@ -90,11 +90,12 @@ jobs:
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
             brew tap --repair
-            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)(-[0-9\._]*)?$/\1/p')
+            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
+            FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
             brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
-            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$CIRCLE_TAG
+            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$RELEASE_TAG
             brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
       - run: |
             # modify merge message platform tag
@@ -104,7 +105,8 @@ jobs:
             # upload bottles to github releases
             brew tap tcnksm/ghr
             brew install ghr
-            ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$CIRCLE_TAG" /tmp/bottles
+            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
+            ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$RELEASE_TAG" /tmp/bottles
       - persist_to_workspace:
           root: /tmp
           paths:
@@ -130,11 +132,12 @@ jobs:
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
             brew tap --repair
-            FORMULA=$(echo "$CIRCLE_TAG" | sed -nE 's/(^[a-z\-]*)(-[0-9\._]*)?$/\1/p')
+            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
+            FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
             brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
-            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$CIRCLE_TAG
+            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$RELEASE_TAG
             brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
       - run: |
             # upload bottles to github releases
@@ -142,7 +145,8 @@ jobs:
             curl -L https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip -o /tmp/ghr.zip
             mkdir -p ~/.local/bin/
             unzip /tmp/ghr.zip  -d ~/.local/bin/
-            ~/.local/bin/ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$CIRCLE_TAG" /tmp/bottles
+            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
+            ~/.local/bin/ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$RELEASE_TAG" /tmp/bottles
       - persist_to_workspace:
           root: /tmp
           paths:
@@ -166,11 +170,12 @@ jobs:
           brew tap --repair
           # create pull request
           cd $TAP_PATH
-          git reset --hard origin/master
+          git reset --hard origin/$CIRCLE_BRANCH
           brew bottle --merge --write /tmp/workspace/bottles/*.json
-          git checkout -b "$CIRCLE_TAG#pr"
+          RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
+          git checkout -b "$RELEASE_TAG#pr"
           git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-          git push --set-upstream --force origin "$CIRCLE_TAG#pr"
+          git push --set-upstream --force origin "$RELEASE_TAG#pr"
           hub pull-request -m "$(git log -1 --pretty=%B)"
 
 workflows:
@@ -180,29 +185,23 @@ workflows:
       - test-bot-macos:
           filters:
             branches:
-              ignore: /master|.*#pr/
+              ignore: /master|.*#pr|.#bottle/
       - test-bot-linux:
           filters:
             branches:
-              ignore: /master|.*#pr/
+              ignore: /master|.*#pr|.#bottle/
       - create-pr:
           requires:
             - bottle-macos
             - bottle-linux
           filters:
-            tags:
-              only: /.*/
             branches:
-              ignore: /.*/
+              only: /.*#bottle/
       - bottle-macos:
           filters:
-            tags:
-              only: /.*/
             branches:
-              ignore: /.*/
+              only: /.*#bottle/
       - bottle-linux:
           filters:
-            tags:
-              only: /.*/
             branches:
-              ignore: /.*/
+              only: /.*#bottle/
