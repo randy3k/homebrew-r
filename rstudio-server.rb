@@ -140,7 +140,7 @@ class RstudioServer < Formula
       ENV["RSTUDIO_VERSION_PATCH"] = version.to_s.split(".")[2]
     end
 
-    # remove CFLAGS anc CXXFLAGS set by java requirement
+    # remove CFLAGS and CXXFLAGS set by java requirement
     ENV.remove "CFLAGS", "-I/usr/local/linux"
     ENV.remove "CXXFLAGS", "-I/usr/local/linux"
 
