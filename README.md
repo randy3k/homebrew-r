@@ -8,7 +8,7 @@ bottles are built by CircieCI and uploaded to Github release page.
 ## Installing r with x11 support
 
 <details>
-1. add this tap and install `rstudio-server`
+1. add this tap and install `r-x11`
 
 ```sh
 brew tap randy3k/r
