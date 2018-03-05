@@ -15,7 +15,7 @@ Although this tap should also work for Linuxbrew, but we will focus on macOS Hom
 2. add this tap and install `rstudio-server`
 
 ```sh
-brew tap randy3k/rstudio-server
+brew tap randy3k/r
 brew install rstudio-server
 ```
 

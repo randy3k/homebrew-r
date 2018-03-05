@@ -4,7 +4,7 @@ jobs:
     macos:
       xcode: "9.0"
     environment:
-      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-rstudio-server
+      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
       HOMEBREW_DEVELOPER: 1
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
@@ -38,7 +38,7 @@ jobs:
     docker:
       - image: linuxbrew/linuxbrew
     environment:
-      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-rstudio-server
+      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
       HOMEBREW_DEVELOPER: 1
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:

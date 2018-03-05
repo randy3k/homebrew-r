@@ -6,7 +6,7 @@ class BoostRstudioServer < Formula
   head "https://github.com/boostorg/boost.git"
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-rstudio-server/releases/download/boost-rstudio-server-1.63.0"
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/boost-rstudio-server-1.63.0"
     cellar :any_skip_relocation
     rebuild 3
     sha256 "fc9c4c730afa450b0c3a847e25930db5ad9fcd6a698935cd79bf9cbfc3722512" => :sierra_or_later
