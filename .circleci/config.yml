@@ -185,11 +185,11 @@ workflows:
       - test-bot-macos:
           filters:
             branches:
-              ignore: /master|.*#pr|.#bottle/
+              ignore: /master|.*#pr|.*#bottle/
       - test-bot-linux:
           filters:
             branches:
-              ignore: /master|.*#pr|.#bottle/
+              ignore: /master|.*#pr|.*#bottle/
       - create-pr:
           requires:
             - bottle-macos
