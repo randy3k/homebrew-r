@@ -21,10 +21,6 @@ class CairoX11 < Formula
   depends_on "libpng"
   depends_on "pixman"
   depends_on "glib"
-  unless OS.mac?
-    depends_on "zlib"
-    depends_on "linuxbrew/xorg/xorg"
-  end
 
   def install
     args = %W[
@@ -33,16 +29,10 @@ class CairoX11 < Formula
       --enable-gobject=yes
       --enable-svg=yes
       --enable-tee=yes
-    ]
-    args += %w[
       --enable-quartz-image
-    ] if OS.mac?
+    ]
 
-    if build.with?("x11")
-      args << "--enable-xcb=yes" << "--enable-xlib=yes" << "--enable-xlib-xrender=yes"
-    else
-      args << "--enable-xcb=no" << "--enable-xlib=no" << "--enable-xlib-xrender=no"
-    end
+    args << "--enable-xcb=yes" << "--enable-xlib=yes" << "--enable-xlib-xrender=yes"
 
     if build.head?
       system "./autogen.sh", *args
