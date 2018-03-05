@@ -8,6 +8,7 @@ class RX11 < Formula
   depends_on "gcc" # for gfortran
   depends_on "automake"
   depends_on "gettext"
+  depends_on "cairo-x11"
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libtiff"
@@ -30,14 +31,14 @@ class RX11 < Formula
     sha256 "0405bb5e4c4d60b466335e5da07be4f9570045a24aed09e7bc0640e1a00f3adb"
   end
 
-  env :std
-
   def install
     # Fix dyld: lazy symbol binding failed: Symbol not found: _clock_gettime
     if MacOS.version == "10.11" && MacOS::Xcode.installed? &&
        MacOS::Xcode.version >= "8.0"
       ENV["ac_cv_have_decl_clock_gettime"] = "no"
     end
+
+    inreplace ["configure", "m4/cairo.m4", "src/modules/X11/devX11.h"], "cairo-xlib.h", "cairo.h"
 
     args = [
       "--prefix=#{prefix}",
