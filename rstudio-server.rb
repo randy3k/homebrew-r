@@ -219,17 +219,6 @@ class RstudioServer < Formula
         "--replace-needed", "libncurses.so.5", "libncurses.so.6",
         "--remove-needed", "libtinfo.so.5",
         prefix/"rstudio-server/bin/rsclang/libclang.so"
-
-      # brew patchelf rstudio-server
-      keg = Keg.new(prefix)
-      keg.relocate_dynamic_linkage Keg::Relocation.new(
-        :old_prefix => Keg::PREFIX_PLACEHOLDER,
-        :old_cellar => Keg::CELLAR_PLACEHOLDER,
-        :old_repository => Keg::REPOSITORY_PLACEHOLDER,
-        :new_prefix => HOMEBREW_PREFIX.to_s,
-        :new_cellar => HOMEBREW_CELLAR.to_s,
-        :new_repository => HOMEBREW_REPOSITORY.to_s,
-      )
     end
   end
 
