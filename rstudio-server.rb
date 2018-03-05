@@ -28,7 +28,7 @@ class RstudioServer < Formula
   end
 
   depends_on :java => ["1.8", :build]
-  depends_on "r" => :build
+  depends_on "r" => :recommended
   depends_on "cmake" => :build
   depends_on "gcc" => :build
   depends_on "ant" => :build
