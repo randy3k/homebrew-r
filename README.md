@@ -3,7 +3,7 @@
 As [homebrew-science](https://github.com/Homebrew/homebrew-science) has been
 deprecated, this tap is now used to host the formula for [RStudio
 Server](https://www.rstudio.com/products/rstudio/download-server/) and other related stuffs. The
-bottles are built by CircieCI and uploaded to Github release page.
+bottles are built by [CircieCI](https://circleci.com/gh/randy3k/homebrew-r) and uploaded to Github release page.
 
 ## Installing r with x11 support
 

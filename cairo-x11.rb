@@ -15,12 +15,17 @@ class CairoX11 < Formula
   keg_only :provided_pre_mountain_lion
 
   depends_on "pkg-config" => :build
-  depends_on :x11
   depends_on "freetype"
   depends_on "fontconfig"
   depends_on "libpng"
   depends_on "pixman"
   depends_on "glib"
+  if OS.mac?
+    depends_on :x11
+  elsif OS.linux?
+    depends_on "zlib"
+    depends_on "linuxbrew/xorg/xorg"
+  end
 
   def install
     args = %W[
@@ -29,8 +34,10 @@ class CairoX11 < Formula
       --enable-gobject=yes
       --enable-svg=yes
       --enable-tee=yes
-      --enable-quartz-image
     ]
+    args += %W[
+      --enable-quartz-image
+    ] if OS.mac?
 
     args << "--enable-xcb=yes" << "--enable-xlib=yes" << "--enable-xlib-xrender=yes"
 
