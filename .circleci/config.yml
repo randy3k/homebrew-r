@@ -8,6 +8,8 @@ jobs:
       HOMEBREW_DEVELOPER: 1
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
+      - run:
+          brew cask install xquartz
       - run: |
           brew --version
           brew update
@@ -74,14 +76,14 @@ jobs:
             mkdir /tmp/bottles
             cd /tmp/bottles
             brew install patchelf
-            brew tap linuxbrew/xorg
-            brew tap linuxbrew/extra
             brew test-bot --skip-setup --local
 
   bottle-macos:
     macos:
       xcode: "9.0"
     steps:
+      - run:
+          brew cask install xquartz
       - checkout
       - run:
           no_output_timeout: 60m
@@ -90,8 +92,8 @@ jobs:
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
             brew tap --repair
-            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
-            FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
+            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z0-9\-]+-[0-9\._]+)#bottle$/\1/p')
+            FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[a-z0-9\-]*)-[0-9\._]*$/\1/p')
             brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
@@ -105,7 +107,7 @@ jobs:
             # upload bottles to github releases
             brew tap tcnksm/ghr
             brew install ghr
-            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
+            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z0-9\-]+-[0-9\._]+)#bottle$/\1/p')
             ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$RELEASE_TAG" /tmp/bottles
       - persist_to_workspace:
           root: /tmp
@@ -132,8 +134,8 @@ jobs:
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
             brew tap --repair
-            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
-            FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[a-z\-]*)-[0-9\._]*$/\1/p')
+            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z0-9\-]+-[0-9\._]+)#bottle$/\1/p')
+            FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[a-z0-9\-]*)-[0-9\._]*$/\1/p')
             brew install --build-from-source --build-bottle $FORMULA
             mkdir -p /tmp/bottles
             cd /tmp/bottles
@@ -145,12 +147,38 @@ jobs:
             curl -L https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip -o /tmp/ghr.zip
             mkdir -p ~/.local/bin/
             unzip /tmp/ghr.zip  -d ~/.local/bin/
-            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
+            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z0-9\-]+-[0-9\._]+)#bottle$/\1/p')
             ~/.local/bin/ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$RELEASE_TAG" /tmp/bottles
       - persist_to_workspace:
           root: /tmp
           paths:
             - bottles
+
+  create-macos-pr:
+    macos:
+      xcode: "9.0"
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - checkout
+      - run: |
+          git config --global user.name randy3k
+          git config --global user.email randy.cs.lai@gmail.com
+      - run: |
+          brew install hub
+          TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+          mkdir -p $TAP_PATH
+          cp -a ./ $TAP_PATH/
+          brew tap --repair
+          # create pull request
+          cd $TAP_PATH
+          git reset --hard origin/$CIRCLE_BRANCH
+          brew bottle --merge --write /tmp/workspace/bottles/*.json
+          RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z0-9\-]+-[0-9\._]+)#bottle$/\1/p')
+          git checkout -b "$RELEASE_TAG#pr"
+          git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          git push --set-upstream --force origin "$RELEASE_TAG#pr"
+          hub pull-request -m "$(git log -1 --pretty=%B)"
 
   create-pr:
     docker:
@@ -172,7 +200,7 @@ jobs:
           cd $TAP_PATH
           git reset --hard origin/$CIRCLE_BRANCH
           brew bottle --merge --write /tmp/workspace/bottles/*.json
-          RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z\-]+-[0-9\._]+)#bottle$/\1/p')
+          RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[a-z0-9\-]+-[0-9\._]+)#bottle$/\1/p')
           git checkout -b "$RELEASE_TAG#pr"
           git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
@@ -185,11 +213,17 @@ workflows:
       - test-bot-macos:
           filters:
             branches:
-              ignore: /master|.*#pr|.*#bottle/
+              ignore: /master|.*#pr|.*#bottle|.*#macos-bottle/
       - test-bot-linux:
           filters:
             branches:
-              ignore: /master|.*#pr|.*#bottle/
+              ignore: /master|.*#pr|.*#bottle|.*#macos-bottle/
+      - create-macos-pr:
+          requires:
+            - bottle-macos
+          filters:
+            branches:
+              only: /.*#macos-bottle/
       - create-pr:
           requires:
             - bottle-macos
@@ -200,7 +234,7 @@ workflows:
       - bottle-macos:
           filters:
             branches:
-              only: /.*#bottle/
+              only: /.*#bottle|.*#macos-bottle/
       - bottle-linux:
           filters:
             branches:
