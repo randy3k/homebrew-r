@@ -5,6 +5,11 @@ class CairoX11 < Formula
   mirror "https://www.mirrorservice.org/sites/ftp.netbsd.org/pub/pkgsrc/distfiles/cairo-1.14.12.tar.xz"
   sha256 "8c90f00c500b2299c0a323dd9beead2a00353752b2092ead558139bd67f7bf16"
 
+  bottle do
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/cairo-x11-1.14.12"
+    sha256 "af0c1d1dbfba938009ae36603dd6bb10d72a6a523594fed5f9205d9e10ff06e9" => :sierra_or_later
+  end
+
   head do
     url "https://anongit.freedesktop.org/git/cairo", :using => :git
     depends_on "automake" => :build
