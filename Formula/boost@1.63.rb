@@ -1,4 +1,4 @@
-class BoostRstudioServer < Formula
+class BoostAT163 < Formula
   desc "Collection of portable C++ source libraries"
   homepage "https://www.boost.org/"
   url "https://downloads.sourceforge.net/project/boost/boost/1.63.0/boost_1_63_0.tar.bz2"
