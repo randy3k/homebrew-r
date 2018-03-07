@@ -7,10 +7,10 @@ class BoostRstudioServer < Formula
   revision 1
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-r/releases/download/boost1.63-1.63.0"
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/boost-rstudio-server-1.63.0_1"
     cellar :any_skip_relocation
-    sha256 "2ac1d6011036f9e462cdcfd58b37a450315e9e71c728366e045c1f5d7b00ab53" => :sierra_or_later
-    sha256 "06ff24cb058e38728293733bbb42eca14c60fba265aa7e1f2f3b5d3086d6a881" => :x86_64_linux
+    sha256 "0eb30c2211dd068f55dac5ac574bcf885c050249e73c65638bcee146100090b7" => :sierra_or_later
+    sha256 "516507a07f7544144df27a32f51cb9278f40c0b6b5850f87b862c94b51a75e70" => :x86_64_linux
   end
 
   keg_only :versioned_formula
