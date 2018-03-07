@@ -81,6 +81,10 @@ jobs:
   bottle-macos:
     macos:
       xcode: "9.0"
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - run:
           brew cask install xquartz
@@ -88,6 +92,7 @@ jobs:
       - run:
           no_output_timeout: 60m
           command: |
+            brew update
             TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
@@ -117,6 +122,10 @@ jobs:
   bottle-linux:
     docker:
       - image: linuxbrew/linuxbrew
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - run: |
           sudo apt-get update
@@ -130,6 +139,7 @@ jobs:
       - run:
           no_output_timeout: 60m
           command: |
+            brew update
             TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
