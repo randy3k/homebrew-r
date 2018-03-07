@@ -4,7 +4,7 @@ class RstudioServer < Formula
   url "https://github.com/rstudio/rstudio/archive/v1.1.419.tar.gz"
   sha256 "292ec1c2824b16bc76bc8672dcd9f59d4c74f52b24ffbbafc2b4c7f74658fb4b"
   head "https://github.com/rstudio/rstudio.git"
-  revision 2
+  revision 3
 
   bottle do
     root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.419_2"
@@ -21,12 +21,7 @@ class RstudioServer < Formula
     depends_on "linuxbrew/extra/linux-pam"
   end
 
-  if OS.linux?
-    depends_on "boost-rstudio-server"
-  elsif OS.mac?
-    depends_on "boost-rstudio-server" => :build
-  end
-
+  depends_on "boost-rstudio-server" => :build
   depends_on :java => ["1.8", :build]
   depends_on "r" => :recommended
   depends_on "cmake" => :build
@@ -186,6 +181,7 @@ class RstudioServer < Formula
       args << "-DRSTUDIO_USE_SYSTEM_BOOST=Yes"
       args << "-DRSTUDIO_BOOST_VERSION='1.63.0'"
       args << "-DBoost_NO_SYSTEM_PATHS=On"
+      args << "-DBoost_USE_STATIC_LIBS=On"
       args << "-DBOOST_ROOT=#{Formula["boost-rstudio-server"].opt_prefix}"
       args << "-DCMAKE_INSTALL_PREFIX=#{prefix}/rstudio-server"
       args << "-DCMAKE_CXX_FLAGS=-I#{Formula["openssl"].opt_include}"
