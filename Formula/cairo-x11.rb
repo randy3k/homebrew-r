@@ -19,6 +19,8 @@ class CairoX11 < Formula
 
   keg_only :provided_pre_mountain_lion
 
+  depends_on :macos
+
   depends_on "pkg-config" => :build
   depends_on "freetype"
   depends_on "fontconfig"

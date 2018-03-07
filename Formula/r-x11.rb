@@ -9,6 +9,8 @@ class RX11 < Formula
     sha256 "8c1f3a2ccf04f667e0a9498d767c606fa7be72f00e07d488628f38f14dea5d7f" => :sierra_or_later
   end
 
+  depends_on :macos
+
   depends_on "pkg-config" => :build
   depends_on "gcc" # for gfortran
   depends_on "automake"
