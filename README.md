@@ -5,17 +5,6 @@ deprecated, this tap is now used to host the formula for [RStudio
 Server](https://www.rstudio.com/products/rstudio/download-server/) and other related stuffs. The
 bottles are built by [CircieCI](https://circleci.com/gh/randy3k/homebrew-r) and uploaded to Github release page.
 
-## Installing r with x11 support
-
-<details>
-
-1. add this tap and install `r-x11`
-
-```sh
-brew tap randy3k/r
-brew install r-x11
-```
-</details>
 
 ## Installing rstudio-server
 
@@ -58,3 +47,15 @@ sudo rstudio-server start
 
 </details>
 
+
+## Installing r with x11 support
+
+<details>
+
+1. add this tap and install `r-x11`
+
+```sh
+brew tap randy3k/r
+brew install r-x11
+```
+</details>
