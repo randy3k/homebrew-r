@@ -6,11 +6,10 @@ class BoostAT163 < Formula
   head "https://github.com/boostorg/boost.git"
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-r/releases/download/boost-rstudio-server-1.63.0"
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/boost@1.63-1.63.0"
     cellar :any_skip_relocation
-    rebuild 3
-    sha256 "fc9c4c730afa450b0c3a847e25930db5ad9fcd6a698935cd79bf9cbfc3722512" => :sierra_or_later
-    sha256 "737a393c9e14d267d1f994206bb9282f3f9d3d16a09d58d2d04d3aca0e7de417" => :x86_64_linux
+    sha256 "2ac1d6011036f9e462cdcfd58b37a450315e9e71c728366e045c1f5d7b00ab53" => :sierra_or_later
+    sha256 "06ff24cb058e38728293733bbb42eca14c60fba265aa7e1f2f3b5d3086d6a881" => :x86_64_linux
   end
 
   keg_only :versioned_formula
