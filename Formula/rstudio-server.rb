@@ -4,29 +4,23 @@ class RstudioServer < Formula
   url "https://github.com/rstudio/rstudio/archive/v1.1.419.tar.gz"
   sha256 "292ec1c2824b16bc76bc8672dcd9f59d4c74f52b24ffbbafc2b4c7f74658fb4b"
   head "https://github.com/rstudio/rstudio.git"
-  revision 2
+  revision 3
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.419_2"
-    sha256 "c7aa7a317cb038afa1a8b9e6347e61f8f5a1a1f71f6d11033879d5fe10cab3b4" => :sierra_or_later
-    sha256 "acba39c6eed5f6c5f02198c78abb12d3e5f392154d2d23da50372894898edb91" => :x86_64_linux
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.419_3"
+    sha256 "6d0c6ac81544940c4c7905975891526d834d3feca5f2f85c4507c084c3d3e1ac" => :sierra_or_later
+    sha256 "c7d8438ddbd122fe68ba4402e9866b7bc9f0dab85d47959815f61a3f53f62fdd" => :x86_64_linux
   end
 
   if OS.linux?
     depends_on "patchelf" => :build
     depends_on "libedit"
     depends_on "ncurses"
-    depends_on "libffi"
     depends_on "util-linux" # for libuuid
     depends_on "linuxbrew/extra/linux-pam"
   end
 
-  if OS.linux?
-    depends_on "boost-rstudio-server"
-  elsif OS.mac?
-    depends_on "boost-rstudio-server" => :build
-  end
-
+  depends_on "boost-rstudio-server" => :build
   depends_on :java => ["1.8", :build]
   depends_on "r" => :recommended
   depends_on "cmake" => :build
@@ -186,6 +180,7 @@ class RstudioServer < Formula
       args << "-DRSTUDIO_USE_SYSTEM_BOOST=Yes"
       args << "-DRSTUDIO_BOOST_VERSION='1.63.0'"
       args << "-DBoost_NO_SYSTEM_PATHS=On"
+      args << "-DBoost_USE_STATIC_LIBS=On"
       args << "-DBOOST_ROOT=#{Formula["boost-rstudio-server"].opt_prefix}"
       args << "-DCMAKE_INSTALL_PREFIX=#{prefix}/rstudio-server"
       args << "-DCMAKE_CXX_FLAGS=-I#{Formula["openssl"].opt_include}"
