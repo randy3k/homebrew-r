@@ -16,7 +16,6 @@ class RstudioServer < Formula
     depends_on "patchelf" => :build
     depends_on "libedit"
     depends_on "ncurses"
-    depends_on "libffi"
     depends_on "util-linux" # for libuuid
     depends_on "linuxbrew/extra/linux-pam"
   end
