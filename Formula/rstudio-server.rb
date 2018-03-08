@@ -7,9 +7,9 @@ class RstudioServer < Formula
   revision 3
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.419_2"
-    sha256 "c7aa7a317cb038afa1a8b9e6347e61f8f5a1a1f71f6d11033879d5fe10cab3b4" => :sierra_or_later
-    sha256 "acba39c6eed5f6c5f02198c78abb12d3e5f392154d2d23da50372894898edb91" => :x86_64_linux
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.419_3"
+    sha256 "6d0c6ac81544940c4c7905975891526d834d3feca5f2f85c4507c084c3d3e1ac" => :sierra_or_later
+    sha256 "c7d8438ddbd122fe68ba4402e9866b7bc9f0dab85d47959815f61a3f53f62fdd" => :x86_64_linux
   end
 
   if OS.linux?
