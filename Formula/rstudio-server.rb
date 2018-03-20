@@ -1,15 +1,15 @@
 class RstudioServer < Formula
   desc "Integrated development environment (IDE) for R"
   homepage "https://www.rstudio.com"
-  url "https://github.com/rstudio/rstudio/archive/v1.1.419.tar.gz"
-  sha256 "292ec1c2824b16bc76bc8672dcd9f59d4c74f52b24ffbbafc2b4c7f74658fb4b"
+  url "https://github.com/rstudio/rstudio/archive/v1.1.442.tar.gz"
+  sha256 "14cc4bf954d8a7d1053510cbb8c558d1823cad01a1c0effd55c4752c0de36f4a"
   head "https://github.com/rstudio/rstudio.git"
   revision 3
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.419_3"
-    sha256 "6d0c6ac81544940c4c7905975891526d834d3feca5f2f85c4507c084c3d3e1ac" => :sierra_or_later
-    sha256 "c7d8438ddbd122fe68ba4402e9866b7bc9f0dab85d47959815f61a3f53f62fdd" => :x86_64_linux
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.442"
+    sha256 "b69d21c08a98ecbc3aa15e3b3d182516c1d5e5e7e9571bf3e7ea7d5284059b0c" => :sierra_or_later
+    sha256 "f1e01e6cca8c9273b46459af818908a703bd2b90e5ccf32a54a236963facf4f1" => :x86_64_linux
   end
 
   if OS.linux?
