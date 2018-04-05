@@ -3,11 +3,14 @@ class RX11 < Formula
   homepage "https://www.r-project.org/"
   url "https://cran.rstudio.com/src/base/R-3/R-3.4.4.tar.gz"
   sha256 "b3e97d2fab7256d1c655c4075934725ba1cd7cb9237240a11bb22ccdad960337"
+  revision 1
 
   bottle do
     root_url "https://github.com/randy3k/homebrew-r/releases/download/r-x11-3.4.4"
     sha256 "fa85bbe8dfe6c53976b6ccb5b90edb99dc60fb11ec866114bfab40e538d24306" => :sierra_or_later
   end
+
+  env :std
 
   depends_on :macos
 
@@ -15,7 +18,6 @@ class RX11 < Formula
   depends_on "gcc" # for gfortran
   depends_on "automake" => :build
   depends_on "gettext"
-  depends_on "cairo-x11"
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libtiff"
@@ -45,9 +47,9 @@ class RX11 < Formula
       ENV["ac_cv_have_decl_clock_gettime"] = "no"
     end
 
-    inreplace ["configure", "m4/cairo.m4", "src/modules/X11/devX11.h"], "cairo-xlib.h", "cairo.h"
+    # inreplace ["configure", "m4/cairo.m4", "src/modules/X11/devX11.h"], "cairo-xlib.h", "cairo.h"
 
-    ENV.prepend_path "PKG_CONFIG_PATH", Formula["cairo-x11"].opt_lib/"pkgconfig"
+    # ENV.prepend_path "PKG_CONFIG_PATH", Formula["cairo-x11"].opt_lib/"pkgconfig"
 
     args = [
       "--prefix=#{prefix}",
