@@ -1,13 +1,12 @@
 class RX11 < Formula
   desc "R Program with X11 support"
   homepage "https://www.r-project.org/"
-  url "https://cran.rstudio.com/src/base/R-3/R-3.4.4.tar.gz"
-  sha256 "b3e97d2fab7256d1c655c4075934725ba1cd7cb9237240a11bb22ccdad960337"
-  revision 1
+  url "https://cran.rstudio.com/src/base/R-3/R-3.5.0.tar.gz"
+  sha256 "fd1725535e21797d3d9fea8963d99be0ba4c3aecadcf081b43e261458b416870"
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-r/releases/download/r-x11-3.4.4_1"
-    sha256 "05ad672fcd64a44f2c5ff8a6369273f15450ad385615988ac0646cbc60133f4c" => :sierra_or_later
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/r-x11-3.5.0"
+    sha256 "b8278eb819d8f94cdde0bee6cd38b1cb3d7ad5b0b53de4945c7a3058a8968a7e" => :sierra_or_later
   end
 
   env :std
