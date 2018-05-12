@@ -1,10 +1,9 @@
 class RstudioServer < Formula
   desc "Integrated development environment (IDE) for R"
   homepage "https://www.rstudio.com"
-  url "https://github.com/rstudio/rstudio/archive/v1.1.442.tar.gz"
-  sha256 "14cc4bf954d8a7d1053510cbb8c558d1823cad01a1c0effd55c4752c0de36f4a"
+  url "https://github.com/rstudio/rstudio/archive/v1.1.447.tar.gz"
+  sha256 "84fcb3a24325a7232bf7215562b92e826ef026c56b88ceea04cb68135a96681e"
   head "https://github.com/rstudio/rstudio.git"
-  revision 3
 
   bottle do
     root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.442"
@@ -20,7 +19,7 @@ class RstudioServer < Formula
     depends_on "linuxbrew/extra/linux-pam"
   end
 
-  depends_on "boost-rstudio-server" => :build
+  depends_on "randy3k/r/boost-rstudio-server" => :build
   depends_on :java => ["1.8", :build]
   depends_on "r" => :recommended
   depends_on "cmake" => :build
