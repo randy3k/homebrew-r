@@ -1,10 +1,9 @@
 class RstudioServer < Formula
   desc "Integrated development environment (IDE) for R"
   homepage "https://www.rstudio.com"
-  url "https://github.com/rstudio/rstudio/archive/v1.1.442.tar.gz"
-  sha256 "14cc4bf954d8a7d1053510cbb8c558d1823cad01a1c0effd55c4752c0de36f4a"
+  url "https://github.com/rstudio/rstudio/archive/v1.1.453.tar.gz"
+  sha256 "aec3f20594e57e46cfcd98a64e675c1934e53195738a908ec652f720129fa81e"
   head "https://github.com/rstudio/rstudio.git"
-  revision 3
 
   bottle do
     root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.442"
