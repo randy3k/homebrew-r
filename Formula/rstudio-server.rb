@@ -19,7 +19,7 @@ class RstudioServer < Formula
     depends_on "linuxbrew/extra/linux-pam"
   end
 
-  depends_on "boost-rstudio-server" => :build
+  depends_on "randy3k/r/boost-rstudio-server" => :build
   depends_on :java => ["1.8", :build]
   depends_on "r" => :recommended
   depends_on "cmake" => :build
