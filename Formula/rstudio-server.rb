@@ -1,14 +1,14 @@
 class RstudioServer < Formula
   desc "Integrated development environment (IDE) for R"
   homepage "https://www.rstudio.com"
-  url "https://github.com/rstudio/rstudio/archive/v1.1.447.tar.gz"
-  sha256 "84fcb3a24325a7232bf7215562b92e826ef026c56b88ceea04cb68135a96681e"
+  url "https://github.com/rstudio/rstudio/archive/v1.1.453.tar.gz"
+  sha256 "aec3f20594e57e46cfcd98a64e675c1934e53195738a908ec652f720129fa81e"
   head "https://github.com/rstudio/rstudio.git"
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.447"
-    sha256 "99fac7416d43573a799e927244b90302713a3c77371cb75ca47f7b07ce7137b4" => :sierra_or_later
-    sha256 "3e912ba1ac7f1e6d0331b5aa3f2f138c90a69bd052e03126488e94669b90d6d9" => :x86_64_linux
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.453"
+    sha256 "a11a0f63d4680bef7809ea6a1e27c18c0ce8ef4d00af98243e21496e2aad96a5" => :sierra_or_later
+    sha256 "b50e0b0c7b288327f6bca11af746d1eeb86463e2c8752c3f64cf9b924535b814" => :x86_64_linux
   end
 
   if OS.linux?
