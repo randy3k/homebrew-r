@@ -6,6 +6,7 @@ class RstudioServer < Formula
   head "https://github.com/rstudio/rstudio.git"
 
   bottle do
+    rebuild 1
     root_url "https://github.com/randy3k/homebrew-r/releases/download/rstudio-server-1.1.453"
     sha256 "a11a0f63d4680bef7809ea6a1e27c18c0ce8ef4d00af98243e21496e2aad96a5" => :sierra_or_later
     sha256 "b50e0b0c7b288327f6bca11af746d1eeb86463e2c8752c3f64cf9b924535b814" => :x86_64_linux
