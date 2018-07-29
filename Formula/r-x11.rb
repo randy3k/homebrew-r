@@ -5,8 +5,8 @@ class RX11 < Formula
   sha256 "0463bff5eea0f3d93fa071f79c18d0993878fd4f2e18ae6cf22c1639d11457ed"
 
   bottle do
-    root_url "https://github.com/randy3k/homebrew-r/releases/download/r-x11-3.5.0"
-    sha256 "b8278eb819d8f94cdde0bee6cd38b1cb3d7ad5b0b53de4945c7a3058a8968a7e" => :sierra_or_later
+    root_url "https://github.com/randy3k/homebrew-r/releases/download/r-x11-3.5.1_1"
+    sha256 "92ba9eaa6a534e397ba3bb05c6f27eb07324c6b6a70ed5189091ca99ccb80b8e" => :sierra_or_later
   end
 
   env :std
