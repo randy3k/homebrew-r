@@ -8,7 +8,6 @@ bottles are built by [CircieCI](https://circleci.com/gh/randy3k/homebrew-r) and 
 
 ## Installing rstudio-server
 
-<details>
 
 Although this formula should also work for Linuxbrew, but we will focus on macOS Homebrew.
 
@@ -45,12 +44,10 @@ auth-minimum-user-id=500
 sudo rstudio-server start
 ```
 
-</details>
 
 
 ## Installing r with x11 support
 
-<details>
 
 1. add this tap and install `r-x11`
 
@@ -58,4 +55,3 @@ sudo rstudio-server start
 brew tap randy3k/r
 brew install r-x11
 ```
-</details>
