@@ -136,14 +136,10 @@ jobs:
           sudo apt-get install -y oracle-java8-installer
           sudo apt-get install -y zip unzip
       - checkout
-      - run: |
-          brew update
-          # rollback to earlier version of linuxbrew
-          cd /home/linuxbrew/.linuxbrew/Homebrew
-          git checkout 1.6.10
       - run:
           no_output_timeout: 60m
           command: |
+            brew update
             TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
