@@ -1,0 +1,4 @@
+{
+    "rstudio-server": "brewsci/base",
+    "boost-rstudio-server": "brewsci/base"
+}
