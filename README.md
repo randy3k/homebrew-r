@@ -19,4 +19,6 @@ brew install rstudio-server
 ```sh
 brew tap randy3k/r
 brew install r-x11
+# or R-devel
+brew install --HEAD r-x11
 ```
