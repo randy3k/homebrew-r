@@ -22,12 +22,6 @@ class RX11 < Formula
   # needed to preserve executable permissions on files without shebangs
   skip_clean "lib/R/bin"
 
-  resource "gss" do
-    url "https://cloud.r-project.org/src/contrib/gss_2.2-2.tar.gz", :using => :nounzip
-    mirror "https://mirror.las.iastate.edu/CRAN/src/contrib/gss_2.2-2.tar.gz"
-    sha256 "1da4da894378ee730cff9628e8b4d2a0d7dfa344b94e5bce6953e66723c21fe4"
-  end
-
   keg_only :versioned_formula
 
   def install
@@ -101,10 +95,5 @@ class RX11 < Formula
   test do
     assert_equal "[1] 2", shell_output("#{bin}/Rscript -e 'print(1+1)'").chomp
     assert_equal ".dylib", shell_output("#{bin}/R CMD config DYLIB_EXT").chomp
-
-    testpath.install resource("gss")
-    system bin/"R", "CMD", "INSTALL", "--library=.", Dir["gss*"].first
-    assert_predicate testpath/"gss/libs/gss.so", :exist?,
-                     "Failed to install gss package"
   end
 end
