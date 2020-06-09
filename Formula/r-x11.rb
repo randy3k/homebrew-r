@@ -48,11 +48,7 @@ class RX11 < Formula
       "--enable-R-shlib",
       "SED=/usr/bin/sed", # don't remember Homebrew's sed shim
       "--disable-java",
-      "--with-blas=-L#{Formula["openblas"].opt_lib} -lopenblas",
-      "CAIRO_CPPFLAGS=",  # avoid picking up homebrew cairo
-      "CAIROX11_CPPFLAGS=",
-      "CAIRO_LIBS=",
-      "CAIROX11_LIBS="
+      "--with-blas=-L#{Formula["openblas"].opt_lib} -lopenblas"
     ]
 
     # Help CRAN packages find gettext and readline
@@ -60,6 +56,9 @@ class RX11 < Formula
       ENV.append "CPPFLAGS", "-I#{Formula[f].opt_include}"
       ENV.append "LDFLAGS", "-L#{Formula[f].opt_lib}"
     end
+
+    # help picking up x11 cairo
+    ENV.prepend_path "PKG_CONFIG_LIBDIR", "#{MacOS::X11.lib}/pkgconfig"
 
     system "./configure", *args
     system "make"
