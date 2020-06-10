@@ -12,7 +12,6 @@ class RX11 < Formula
   depends_on "gcc" # for gfortran
   depends_on "gettext"
   depends_on "jpeg"
-  depends_on "libpng"
   depends_on "openblas"
   depends_on "pcre2"
   depends_on "readline"
@@ -53,6 +52,8 @@ class RX11 < Formula
 
     # help picking up x11 cairo
     ENV.prepend_path "PKG_CONFIG_LIBDIR", "#{MacOS::X11.lib}/pkgconfig"
+    ENV.prepend "LDFLAGS", "-L#{MacOS::X11.lib}"
+    ENV["r_cv_has_pangocairo"] = "no"
 
     system "./configure", *args
     system "make"
