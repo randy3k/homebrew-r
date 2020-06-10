@@ -19,7 +19,7 @@ class RX11 < Formula
   depends_on :x11
 
   # needed to preserve executable permissions on files without shebangs
-  skip_clean "lib/R/bin"
+  skip_clean "lib/R/bin", "lib/R/doc"
 
   keg_only :versioned_formula
 
