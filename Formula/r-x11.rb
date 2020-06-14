@@ -89,7 +89,7 @@ class RX11 < Formula
   def post_install
     short_version =
       `#{bin}/Rscript -e 'cat(as.character(getRversion()[1,1:2]))'`.strip
-    site_library = HOMEBREW_PREFIX/"lib/R/#{short_version}/site-library"
+    site_library = HOMEBREW_PREFIX/"lib/R-X11/#{short_version}/site-library"
     site_library.mkpath
     ln_s site_library, lib/"R/site-library"
   end
