@@ -1,8 +1,8 @@
 class RX11 < Formula
   desc "Software environment for statistical computing"
   homepage "https://www.r-project.org/"
-  url "https://cran.r-project.org/src/base/R-4/R-4.0.1.tar.gz"
-  sha256 "95fe24a4d8d8f8f888460c8f5fe4311cec656e7a1722d233218bc03861bc6f32"
+  url "https://cran.r-project.org/src/base/R-4/R-4.0.3.tar.gz"
+  sha256 "09983a8a78d5fb6bc45d27b1c55f9ba5265f78fa54a55c13ae691f87c5bb9e0d"
   head "https://stat.ethz.ch/R/daily/R-devel.tar.gz"
 
   # To use XQuartz headers
@@ -17,7 +17,6 @@ class RX11 < Formula
   depends_on "pcre2"
   depends_on "readline"
   depends_on "xz"
-  depends_on :x11
 
   # needed to preserve executable permissions on files without shebangs
   skip_clean "lib/R/bin", "lib/R/doc"
@@ -52,8 +51,9 @@ class RX11 < Formula
     end
 
     # help picking up x11 cairo
-    ENV.prepend_path "PKG_CONFIG_LIBDIR", "#{MacOS::X11.lib}/pkgconfig"
-    ENV.prepend "LDFLAGS", "-L#{MacOS::X11.lib}"
+    ENV.prepend_path "PKG_CONFIG_LIBDIR", "#{MacOS::XQuartz.lib}/pkgconfig"
+    ENV.append "CPPFLAGS", "-I#{MacOS::XQuartz.include}"
+    ENV.append "LDFLAGS", "-L#{MacOS::XQuartz.lib}"
     ENV["r_cv_has_pangocairo"] = "no"
 
     system "./configure", *args
