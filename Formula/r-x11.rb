@@ -52,8 +52,8 @@ class RX11 < Formula
 
     # help picking up x11 cairo
     ENV.prepend_path "PKG_CONFIG_LIBDIR", "#{MacOS::XQuartz.lib}/pkgconfig"
-    ENV.append "CPPFLAGS", "-I#{MacOS::XQuartz.include}"
-    ENV.append "LDFLAGS", "-L#{MacOS::XQuartz.lib}"
+    ENV.prepend "CPPFLAGS", "-I#{MacOS::XQuartz.include}"
+    ENV.prepend "LDFLAGS", "-L#{MacOS::XQuartz.lib}"
     ENV["r_cv_has_pangocairo"] = "no"
 
     system "./configure", *args
